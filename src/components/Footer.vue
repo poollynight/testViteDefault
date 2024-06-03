@@ -11,9 +11,15 @@
       <v-col cols="3">
         <h4>
           <p class="border-b-md border-surface-light mb-4 title">Products</p>
-          <h4 class="mb-4"><a class="text-decoration-none text-white">For Men</a></h4>
-          <h4 class="mb-4"><a class="text-decoration-none text-white">Gift Set</a></h4>
-          <h4 class="mb-4"><a class="text-decoration-none text-white">For Ladies</a></h4>
+          <h4 class="mb-4">
+            <a class="text-decoration-none text-white">For Men</a>
+          </h4>
+          <h4 class="mb-4">
+            <a class="text-decoration-none text-white">Gift Set</a>
+          </h4>
+          <h4 class="mb-4">
+            <a class="text-decoration-none text-white">For Ladies</a>
+          </h4>
         </h4>
       </v-col>
       <v-col cols="3">

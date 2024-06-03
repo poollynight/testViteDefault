@@ -1,11 +1,7 @@
 <template>
-  <link
-    href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
-    rel="stylesheet"
-  />
   <v-app>
     <!-- Header -->
-    <v-container-fluid class="border">
+    <div class="">
       <!-- Top header -->
       <v-toolbar color="red-darken-4" height="40">
         <v-container>
@@ -23,13 +19,7 @@
             class="text-red-darken-4 h-100 d-inline-flex justify-center text-h5"
           >
             <h1>
-              <v-p
-                v-model="tab"
-                @click="tabSelected('Home')"
-                class="text-decoration-none text-weight-bold cursor-pointer"
-              >
-                Odour
-              </v-p>
+              <p class="text-decoration-none text-weight-bold">Odour</p>
             </h1>
           </v-col>
           <v-col cols="6">
@@ -39,16 +29,16 @@
               align-tabs="center"
               color="red"
             >
-              <v-tab :value="Home" @click="tabSelected('Home')"
+              <v-tab @click="tabSelected('Home')"
                 ><h3 class="tab">Home</h3></v-tab
               >
-              <v-tab :value="Shop" @click="tabSelected('Shop')"
+              <v-tab @click="tabSelected('Shop')"
                 ><h3 class="tab">Shop</h3></v-tab
               >
-              <v-tab :value="About" @click="tabSelected('About')"
+              <v-tab @click="tabSelected('About')"
                 ><h3 class="tab">About</h3></v-tab
               >
-              <v-tab :value="Contact" @click="tabSelected('Contact')"
+              <v-tab @click="tabSelected('Contact')"
                 ><h3 class="tab">Contact</h3></v-tab
               >
             </v-tabs>
@@ -64,7 +54,7 @@
           </v-col>
         </v-row>
       </v-toolbar>
-    </v-container-fluid>
+    </div>
     <v-main>
       <Home v-if="HomeSelected" />
       <Shop v-if="ShopSelected" @load-product="loadProduct"></Shop>
@@ -88,7 +78,7 @@ export default {
     Shop,
     Product,
   },
-  
+
   data: () => ({
     tab: null,
     HomeSelected: true,
@@ -137,10 +127,9 @@ export default {
       this.componentParam = item;
       this.ShopSelected = false;
     },
-
-    
   },
   mounted() {
+    localStorage.setItem("tab", 'Home');
     this.switchTab();
   },
 };

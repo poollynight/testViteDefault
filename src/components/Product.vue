@@ -157,7 +157,13 @@ export default {
     addToCart() {
       // this.$cookie.set("keyName", keyValue, "expiring time");
       // setCookie('cookie','my cookie',30 )
-      document.cookie = "keyName" + "=" + [{name: "my cookie", value: "my cookie"},{name:"my cookie",value:"my cookie"}];
+      document.cookie =
+        "keyName" +
+        "=" +
+        [
+          { name: "my cookie", value: "my cookie" },
+          { name: "my cookie", value: "my cookie" },
+        ];
       console.log(document.cookie);
     },
   },
