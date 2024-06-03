@@ -29,10 +29,10 @@
               align-tabs="center"
               color="red"
             >
-              <v-tab @click="tabSelected('Home')"
+              <v-tab @click="tabSelected('Home')" 
                 ><h3 class="tab">Home</h3></v-tab
               >
-              <v-tab @click="tabSelected('Shop')"
+              <v-tab @click="tabSelected('Shop')" selected
                 ><h3 class="tab">Shop</h3></v-tab
               >
               <v-tab @click="tabSelected('About')"
@@ -58,8 +58,8 @@
     <v-main>
       <Home v-if="HomeSelected" />
       <Shop v-if="ShopSelected" @load-product="loadProduct"></Shop>
-      <About v-if="AboutSelected"></About>
-      <Contact v-if="ContactSelected"></Contact>
+      <!-- <About v-if="AboutSelected"></About>
+      <Contact v-if="ContactSelected"></Contact> -->
       <Product
         v-if="componentName == 'Product'"
         :item="componentParam"
@@ -72,9 +72,13 @@
 <script>
 import Product from "./components/Product.vue";
 import Shop from "./components/Shop.vue";
+import Home from "./components/Home.vue";
+import Footer from "./components/Footer.vue";
 export default {
   name: "app",
   components: {
+    Home,
+    Footer,
     Shop,
     Product,
   },
@@ -129,7 +133,7 @@ export default {
     },
   },
   mounted() {
-    localStorage.setItem("tab", 'Home');
+    this.tabSelected("Home");
     this.switchTab();
   },
 };

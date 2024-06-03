@@ -1,4 +1,8 @@
 <template>
+  <link
+    href="https://fonts.googleapis.com/css?family=Material+Icons"
+    rel="stylesheet"
+  />
   <v-card color="grey-lighten-4">
     <v-container>
       <v-row justify="center" text-align="center">
@@ -80,7 +84,7 @@
                     class="bg-red-darken-4 mr-5"
                     @click="decreaseQuantity()"
                   >
-                    <v-icon icon="mdi-minus"></v-icon>
+                    -
                   </v-btn>
                 </v-col>
                 <v-col cols="2">
@@ -90,7 +94,7 @@
                 </v-col>
                 <v-col cols="2">
                   <v-btn class="bg-red-darken-4" @click="increaseQuantity()">
-                    <v-icon icon="mdi-plus"></v-icon>
+                    +
                   </v-btn>
                 </v-col>
               </v-row>
