@@ -3,113 +3,132 @@
     href="https://fonts.googleapis.com/css?family=Material+Icons"
     rel="stylesheet"
   />
-  <v-card color="grey-lighten-4">
-    <v-container>
-      <v-row justify="center" text-align="center">
-        <v-col cols="5" align="center">
-          <v-img height="400" cover src="/src/assets/cate-men.jpg"></v-img>
-          <v-sheet
-            class="mx-auto mt-5"
-            max-width="500"
-            max-height="150"
-            color="grey-lighten-4"
+
+  <v-container>
+    <v-row no-gutters>
+      <v-col cols="12" sm="5" align="center">
+        <v-sheet
+          class="mx-auto mt-5 bg-white"
+          max-width="500"
+          height="100%"
+          color="grey-lighten-4"
+        >
+          <v-img height="auto" cover src="/src/assets/cate-men.jpg"></v-img>
+          <v-slide-group
+            v-model="model"
+            class="pa-4"
+            center-active
+            show-arrows
           >
-            <v-slide-group
-              v-model="model"
-              color="grey"
-              class="pa-4"
-              center-active
-              show-arrows
+            <v-slide-group-item
+              v-for="n in 3"
+              :key="n"
+              v-slot="{ toggle }"
             >
-              <v-slide-group-item
-                v-for="n in item.image.length"
-                :key="n"
-                v-slot="{ isSelected, toggle }"
+              <v-card
+                class="ma-4"
+                height="100"
+                width="100"
+                @click="toggle"
               >
-                <v-card
-                  :color="isSelected ? 'grey-lighten-2' : 'grey-lighten-1'"
-                  class="ma-4"
-                  height="100"
-                  width="100"
-                  @click="toggle"
+                <v-img
+                  height="200"
+                  aspect-ratio="16/9"
+                  cover
+                  src="/src/assets/cate-men.jpg"
+                ></v-img>
+              </v-card>
+            </v-slide-group-item>
+          </v-slide-group>
+        </v-sheet>
+      </v-col>
+      <v-col cols="12" sm="7" align="center" height="100%">
+        <v-sheet class="text-left pl-5">
+          <div>
+            <p class="ProName">{{ item.name }}</p>
+            <p class="price mt-3 text-h6">{{ item.price }}</p>
+          </div>
+          <div>
+            <p class="text-h6">Description:</p>
+            <p>{{ item.description }}</p>
+          </div>
+          <div>
+            <p class="text-h6">Nhóm hương:</p>
+            <p>{{ item.category }}</p>
+          </div>
+          <div>
+            <p class="text-h6">Tầng hương:</p>
+            <p class="text-subtitle-1">
+              Tầng đầu: {{ item.category }}
+              <br />
+              Tầng giữa: {{ item.category }}
+              <br />
+              Tầng cuối: {{ item.category }}
+            </p>
+          </div>
+          <div>
+            <p class="text-h6">Độ lưu hương:</p>
+            <p class="text-subtitle-1">
+              Trên da: 6 - 8h
+              <br />
+              Trên vải: 12 - 24h
+            </p>
+          </div>
+          <div>
+            <p class="text-h5 mr-4">Số lượng</p>
+            <v-row>
+              <v-col cols="5">
+                <v-text-field
+                  v-model="quantity"
+                  class="centered-text-field no-background-text-field"
                 >
-                  <v-img
-                    height="200"
-                    aspect-ratio="16/9"
-                    cover
-                    src="/src/assets/cate-men.jpg"
-                  ></v-img>
-                </v-card>
-              </v-slide-group-item>
-            </v-slide-group>
-          </v-sheet>
-        </v-col>
-        <v-col cols="7" align="center">
-          <v-card class="text-left pl-5">
-            <div>
-              <p class="ProName">{{ item.name }}</p>
-              <p class="price mt-3 text-h6">{{ item.price }}</p>
-            </div>
-            <div>
-              <p class="text-h6">Description:</p>
-              <p>{{ item.description }}</p>
-            </div>
-            <div>
-              <p class="text-h6">Nhóm hương:</p>
-              <p>{{ item.category }}</p>
-            </div>
-            <div>
-              <p class="text-h6">Tầng hương:</p>
-              <p class="text-subtitle-1">
-                Tầng đầu: {{ item.category }}
-                <br />
-                Tầng giữa: {{ item.category }}
-                <br />
-                Tầng cuối: {{ item.category }}
-              </p>
-            </div>
-            <div>
-              <p class="text-h6">Độ lưu hương:</p>
-              <p class="text-subtitle-1">
-                Trên da: {{ item.category }}
-                <br />
-                Trên vải: {{ item.category }}
-              </p>
-            </div>
-            <div class="d-flex">
-              <p class="text-h5 mr-4">Số lượng</p>
-              <v-row>
-                <v-col cols="2">
-                  <v-btn
-                    class="bg-red-darken-4 mr-5"
-                    @click="decreaseQuantity()"
-                  >
-                    -
-                  </v-btn>
-                </v-col>
-                <v-col cols="2">
-                  <v-input disabled class="text-center quantityInput">
-                    {{ quantity }}
-                  </v-input>
-                </v-col>
-                <v-col cols="2">
-                  <v-btn class="bg-red-darken-4" @click="increaseQuantity()">
-                    +
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </div>
-            <div class="d-flex flex-row">
-              <v-btn class="bg-red-darken-4 mr-6 w-25">Mua ngay</v-btn>
-              <v-btn class="bg-red-darken-4" @click="addToCart"
-                >Thêm vào giỏ hàng</v-btn
-              >
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-card>
+                  <template v-slot:append>
+                    <v-btn class="bg-red-darken-4" @click="increaseQuantity()">
+                      +
+                    </v-btn>
+                  </template>
+                  <template v-slot:prepend>
+                    <v-btn
+                      class="bg-red-darken-4 mr-5"
+                      @click="decreaseQuantity()"
+                    >
+                      -
+                    </v-btn>
+                  </template>
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </div>
+          <div class="d-flex flex-row">
+            <v-btn class="bg-red-darken-4 mr-6 w-25">Mua ngay</v-btn>
+            <v-btn class="bg-red-darken-4" @click="addToCart"
+              >Thêm vào giỏ hàng</v-btn
+            >
+          </div>
+        </v-sheet>
+      </v-col>
+    </v-row>
+  </v-container>
+
+  <!-- Other products -->
+  <!-- <v-sheet class="mx-auto" max-width="600">
+      <v-slide-group show-arrows>
+        <v-slide-group-item
+          v-for="n in 25"
+          :key="n"
+          v-slot="{ isSelected, toggle }"
+        >
+          <v-btn
+            :color="isSelected ? 'primary' : undefined"
+            class="ma-2"
+            rounded
+            @click="toggle"
+          >
+            Options {{ n }}
+          </v-btn>
+        </v-slide-group-item>
+      </v-slide-group>
+    </v-sheet> -->
 </template>
 
 <style>
@@ -122,24 +141,21 @@
 .quantityInput {
   height: 2em;
 }
+.centered-text-field input {
+  text-align: center;
+}
+.no-background-text-field .v-input__slot {
+  background-color: transparent !important;
+}
 </style>
 
 <script>
-// import { useCookies } from "vue-cookies";
 export default {
-  // setup() {
-  //   const { cookies } = useCookies();
-
-  //   const setCookie = () => {
-  //     cookies.set("myCookie", "myValue", 30 * 24 * 60 * 60); // Set cookie for 30 days
-  //     console.log(123);
-  //   };
-
-  //   return {
-  //     setCookie,
-  //   };
-  // },
   props: {
+    products: {
+      type: Array,
+      required: true,
+    },
     item: {
       type: Object,
       required: true,

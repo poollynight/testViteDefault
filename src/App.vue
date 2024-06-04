@@ -1,26 +1,30 @@
 <template>
   <v-app>
     <!-- Header -->
-    <div class="">
+    <div class="bg-red-darken-4 app-header">
       <!-- Top header -->
-      <v-toolbar color="red-darken-4" height="40">
+      <v-row class="" height="30">
         <v-container>
           <v-row class="d-flex" align="center" justify="center">
-            <v-col class="text-center">Nước hoa cho mọi tầng lớp</v-col>
+            <v-col class="text-center"><p>Nước hoa cho mọi tầng lớp</p></v-col>
           </v-row>
         </v-container>
-      </v-toolbar>
+      </v-row>
 
       <!-- Bottom header -->
-      <v-toolbar height="100" class="bg-white">
+      <v-toolbar
+        class="v-toolbar v-toolbar--flat v-toolbar--density-default border-b v-theme--light v-locale--is-ltr v-app-bar border-b"
+      >
         <v-row align="center">
           <v-col
             cols="3"
-            class="text-red-darken-4 h-100 d-inline-flex justify-center text-h5"
+            xs="2"
+            md="3"
+            class="text-red-darken-2 d-inline-flex justify-center text-h5"
           >
-            <h1>
-              <p class="text-decoration-none text-weight-bold">Odour</p>
-            </h1>
+            <p class="text-decoration-none font-weight-bold brand-name">
+              ODOUR
+            </p>
           </v-col>
           <v-col cols="6">
             <v-tabs
@@ -29,17 +33,17 @@
               align-tabs="center"
               color="red"
             >
-              <v-tab @click="tabSelected('Home')" 
-                ><h3 class="tab">Home</h3></v-tab
+              <v-tab @click="tabSelected('Home')"
+                ><p class="tab">Home</p></v-tab
               >
-              <v-tab @click="tabSelected('Shop')" selected
-                ><h3 class="tab">Shop</h3></v-tab
+              <v-tab @click="tabSelected('Shop')"
+                ><p class="tab">Shop</p></v-tab
               >
               <v-tab @click="tabSelected('About')"
-                ><h3 class="tab">About</h3></v-tab
+                ><p class="tab">About</p></v-tab
               >
               <v-tab @click="tabSelected('Contact')"
-                ><h3 class="tab">Contact</h3></v-tab
+                ><p class="tab">Contact</p></v-tab
               >
             </v-tabs>
           </v-col>
@@ -49,13 +53,14 @@
             class="col-3 d-flex justify-space-between"
           >
             <p></p>
-            <a href=""><i class="fas fa-shopping-cart"></i></a>
-            <a href=""><i class="fas fa-user"></i></a>
+            <a href=""><i class="fas fa-shopping-cart">1</i></a>
+            <a href=""><i class="fas fa-user">1</i></a>
           </v-col>
         </v-row>
       </v-toolbar>
     </div>
-    <v-main>
+    <v-main class="bg-blue-grey-lighten-5">
+      <!-- <Cart></Cart> -->
       <Home v-if="HomeSelected" />
       <Shop v-if="ShopSelected" @load-product="loadProduct"></Shop>
       <!-- <About v-if="AboutSelected"></About>
@@ -63,6 +68,7 @@
       <Product
         v-if="componentName == 'Product'"
         :item="componentParam"
+        :products="products"
       ></Product>
     </v-main>
     <Footer></Footer>
@@ -70,6 +76,7 @@
 </template>
 
 <script>
+import Cart from "./components/Cart.vue";
 import Product from "./components/Product.vue";
 import Shop from "./components/Shop.vue";
 import Home from "./components/Home.vue";
@@ -81,6 +88,7 @@ export default {
     Footer,
     Shop,
     Product,
+    Cart,
   },
 
   data: () => ({
@@ -91,6 +99,7 @@ export default {
     ContactSelected: false,
     componentName: null,
     componentParam: null,
+    products: [],
   }),
   methods: {
     tabSelected(tab) {
@@ -126,10 +135,12 @@ export default {
       }
     },
 
-    loadProduct(item) {
+    loadProduct(item, items) {
       this.componentName = "Product";
       this.componentParam = item;
       this.ShopSelected = false;
+      this.products = items;
+      console.log(this.products);
     },
   },
   mounted() {
@@ -141,5 +152,11 @@ export default {
 <style>
 .tab {
   font-size: 1em;
+}
+.brand-name {
+  font-size: 2rem;
+}
+.app-header {
+  z-index: 1010;
 }
 </style>
