@@ -1,20 +1,20 @@
 <template>
-  <v-sheet class="mx-auto" max-width="600">
-    <v-slide-group show-arrows>
-      <v-slide-group-item
-        v-for="n in 25"
-        :key="n"
-        v-slot="{ isSelected, toggle }"
-      >
-        <v-btn
-          :color="isSelected ? 'primary' : undefined"
-          class="ma-2"
-          rounded
-          @click="toggle"
-        >
-          Options {{ n }}
-        </v-btn>
-      </v-slide-group-item>
-    </v-slide-group>
-  </v-sheet>
+  <div class="text-center">
+    <v-pagination
+      v-model="page"
+      :length="15"
+      :total-visible="7"
+      prev-icon="mdi-chevron-left"
+      next-icon="mdi-chevron-right"
+    ></v-pagination>
+  </div>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      page: 1,
+    };
+  },
+};
+</script>

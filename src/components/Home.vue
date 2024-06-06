@@ -25,7 +25,7 @@
           <v-col cols="12" class="text-center">
             <span>{{ categories[n] }}</span>
           </v-col>
-          <v-btn class="responsive-btn" color="red">
+          <v-btn @click="$router.push('/shop')" class="responsive-btn" color="red">
             <p>Go Shop</p>
           </v-btn>
         </v-sheet>

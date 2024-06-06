@@ -3,103 +3,113 @@
     href="https://fonts.googleapis.com/css?family=Material+Icons"
     rel="stylesheet"
   />
-
+  <div>
+    <v-dialog v-model="zoomImage" max-width="800">
+      <v-img
+        height="auto"
+        cover
+        :src="productImageSrc(item.id)"
+        :lazy="true"
+        @click="showImage = false"
+        class="cursor-zoom-in"
+      ></v-img>
+    </v-dialog>
+  </div>
   <v-container>
     <v-row no-gutters>
       <v-col cols="12" sm="5" align="center">
         <v-sheet
-          class="mx-auto mt-5 bg-white"
+          class="bg-white pa-5"
           max-width="500"
           height="100%"
           color="grey-lighten-4"
         >
-          <v-img height="auto" cover src="/src/assets/cate-men.jpg"></v-img>
+          <v-img
+            style="cursor: pointer"
+            height="auto"
+            cover
+            :src="productImageSrc(item.id)"
+            :lazy="true"
+            @click="zoomImage = !zoomImage"
+          ></v-img>
+          <v-dialog>
+            <v-img
+              height="1000px"
+              cover
+              :src="productImageSrc(item.id)"
+              v-model="zoomImage"
+            ></v-img>
+          </v-dialog>
           <v-slide-group
             v-model="model"
-            class="pa-4"
+            class="mt-10"
             center-active
             show-arrows
           >
-            <v-slide-group-item
-              v-for="n in 3"
-              :key="n"
-              v-slot="{ toggle }"
-            >
-              <v-card
-                class="ma-4"
-                height="100"
-                width="100"
-                @click="toggle"
-              >
+            <v-slide-group-item v-for="n in 3" :key="n" v-slot="{ toggle }">
+              <v-card class="ma-4" height="100" width="100" @click="toggle">
                 <v-img
                   height="200"
                   aspect-ratio="16/9"
                   cover
-                  src="/src/assets/cate-men.jpg"
+                  :src="productImageSrc(item.id)"
                 ></v-img>
               </v-card>
             </v-slide-group-item>
           </v-slide-group>
+          <p class="text-subtitle-1 text-red-darken-2 mt-4">
+            Một trong những sản phẩm bán chạy
+          </p>
         </v-sheet>
       </v-col>
-      <v-col cols="12" sm="7" align="center" height="100%">
-        <v-sheet class="text-left pl-5">
+      <v-col cols="12" sm="7" align="center">
+        <v-sheet class="text-left pa-8" height="100%">
           <div>
             <p class="ProName">{{ item.name }}</p>
-            <p class="price mt-3 text-h6">{{ item.price }}</p>
           </div>
-          <div>
-            <p class="text-h6">Description:</p>
-            <p>{{ item.description }}</p>
-          </div>
+          <v-sheet height="4rem" class="bg-grey-lighten-4 d-flex">
+            <p class="ProName mt-3 pl-5 text-red-darken-2">
+              {{ item.unitPrice }} VND
+            </p>
+          </v-sheet>
           <div>
             <p class="text-h6">Nhóm hương:</p>
-            <p>{{ item.category }}</p>
+            <p>{{ nhomHuong }}</p>
           </div>
           <div>
             <p class="text-h6">Tầng hương:</p>
             <p class="text-subtitle-1">
-              Tầng đầu: {{ item.category }}
+              Tầng đầu: {{ tangHuongDau }}
               <br />
-              Tầng giữa: {{ item.category }}
+              Tầng giữa: {{ tangHuongGiua }}
               <br />
-              Tầng cuối: {{ item.category }}
+              Tầng cuối: {{ tangHuongCuoi }}
             </p>
           </div>
           <div>
             <p class="text-h6">Độ lưu hương:</p>
             <p class="text-subtitle-1">
-              Trên da: 6 - 8h
+              Trên da: 14 - 18 giờ
               <br />
-              Trên vải: 12 - 24h
+              Trên vải: 2 - 3 ngày
             </p>
           </div>
           <div>
-            <p class="text-h5 mr-4">Số lượng</p>
+            <p class="text-h5">Số lượng</p>
             <v-row>
-              <v-col cols="5">
-                <v-text-field
-                  v-model="quantity"
-                  class="centered-text-field no-background-text-field"
-                >
-                  <template v-slot:append>
-                    <v-btn class="bg-red-darken-4" @click="increaseQuantity()">
-                      +
-                    </v-btn>
-                  </template>
-                  <template v-slot:prepend>
-                    <v-btn
-                      class="bg-red-darken-4 mr-5"
-                      @click="decreaseQuantity()"
-                    >
-                      -
-                    </v-btn>
-                  </template>
-                </v-text-field>
+              <v-col class="d-flex" cols="12">
+                <v-btn class="bg-red-darken-4 mr-5" @click="decreaseQuantity()">
+                  -
+                </v-btn>
+                <p class="text-h6 mr-4">{{ quantity }}</p>
+                <v-btn class="bg-red-darken-4 mr-5" @click="increaseQuantity()">
+                  +
+                </v-btn>
+                <p>{{ item.quantityInStock }} sản phẩm có sẵn</p>
               </v-col>
             </v-row>
           </div>
-          <div class="d-flex flex-row">
+          <div class="d-flex flex-row pb-4">
             <v-btn class="bg-red-darken-4 mr-6 w-25">Mua ngay</v-btn>
             <v-btn class="bg-red-darken-4" @click="addToCart"
               >Thêm vào giỏ hàng</v-btn
@@ -111,24 +121,16 @@
   </v-container>
 
   <!-- Other products -->
-  <!-- <v-sheet class="mx-auto" max-width="600">
+  <v-container class="mx-auto" max-width="1000">
+    <v-sheet class="pa-2">
+      <p class="text-h5">CÓ THỂ BẠN CŨNG THÍCH</p>
       <v-slide-group show-arrows>
-        <v-slide-group-item
-          v-for="n in 25"
-          :key="n"
-          v-slot="{ isSelected, toggle }"
-        >
-          <v-btn
-            :color="isSelected ? 'primary' : undefined"
-            class="ma-2"
-            rounded
-            @click="toggle"
-          >
-            Options {{ n }}
-          </v-btn>
+        <v-slide-group-item v-for="pro in otherProducts" :key="pro.id">
+          123
         </v-slide-group-item>
       </v-slide-group>
-    </v-sheet> -->
+    </v-sheet>
+  </v-container>
 </template>
 
 <style>
@@ -162,10 +164,20 @@ export default {
     },
   },
   data: () => ({
+    zoomImage: false,
+    nhomHuong: "",
+    tangHuongDau: "",
+    tangHuongGiua: "",
+    tangHuongCuoi: "",
+    otherProducts: [],
     model: null,
     quantity: 1,
   }),
+  computed: {},
   methods: {
+    productImageSrc(id) {
+      return `/src/assets/${id}.jpg`;
+    },
     increaseQuantity() {
       this.quantity += 1;
     },
@@ -186,6 +198,16 @@ export default {
         ];
       console.log(document.cookie);
     },
+  },
+  mounted() {
+    this.otherProducts = this.products.filter((item) => {
+      item.id != this.item.id;
+    });
+    const jsonData = JSON.parse(this.item.description);
+    this.nhomHuong = jsonData.NHOM_HUONG[0];
+    this.tangHuongDau = jsonData.TANG_HUONG.HUONG_DAU;
+    this.tangHuongGiua = jsonData.TANG_HUONG.HUONG_GIUA;
+    this.tangHuongCuoi = jsonData.TANG_HUONG.HUONG_CUOI;
   },
 };
 </script>

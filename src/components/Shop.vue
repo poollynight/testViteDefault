@@ -1,69 +1,72 @@
 <template>
-  <v-container>
-    <test-comp></test-comp>
-    <!-- <v-autocomplete
-      v-model="searchValue"
-      @keydown.enter="searchProducts"
-      @click:append="searchProducts"
-      class="w-25 h-25 searchBox"
-      label="Search"
-      :items="searchArray"
-      variant="outlined"
-    ></v-autocomplete> -->
-    <v-row no-gutters>
-      <!-- <v-col cols="1" sm="1" class="">
-        <v-row no-gutters>
-          <v-col cols="12" sm="12"
-            ><p @click="filterItems('All')" class="pa-2 hover-link">
+  <v-container class="min-height-500 pa-7">
+    <v-row no-gutters class="min-height-500">
+      <v-col cols="3" sm="2" xs="12" class="">
+        <v-row no-gutters no-wrap>
+          <v-col cols="12" sm="6" xs="3"
+            ><p @click="getProductsData(1)" class="pa-2 hover-link">
               All
             </p></v-col
           >
-          <v-col cols="12" sm="12"
-            ><p @click="filterItems('Men')" class="pa-2 hover-link">
+          <v-col cols="12" sm="12" xs="3"
+            ><p
+              @click="getProductsData(1, categories[0])"
+              class="pa-2 hover-link"
+            >
               For Men
             </p></v-col
           >
-          <v-col cols="12" sm="12"
-            ><p @click="filterItems('Ladies')" class="pa-2 hover-link">
+          <v-col cols="12" sm="12" xs="3"
+            ><p
+              @click="getProductsData(2, categories[1])"
+              class="pa-2 hover-link"
+            >
               For Ladies
             </p></v-col
           >
         </v-row>
-      </v-col> -->
+      </v-col>
       <v-col>
-        <v-row no-gutters>
+        <v-row>
           <v-col
-            v-for="item in this.pagedProducts"
+            v-for="item in this.items"
             :key="item.Id"
             :item="item"
             cols="12"
             sm="4"
           >
-            <v-card class="ma-2 pa-2" align="center" justify="center">
-              <v-img
-                max-height="400px"
-                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                cover
-              ></v-img>
-              <v-card-title> {{ item.name }} </v-card-title>
-              <v-card-subtitle> {{ item.unitPrice }} VND</v-card-subtitle>
-              <v-card-actions>
-                <v-btn
-                  color="orange-lighten-2"
-                  text="Explore"
-                  @click="onProductClick(item)"
-                ></v-btn>
-              </v-card-actions>
-            </v-card>
+            <v-lazy>
+              <v-card
+                class="ma-2 pa-2"
+                align="center"
+                justify="center"
+                @click="onProductClick(item)"
+              >
+                <v-img
+                  max-height="400px"
+                  :src="item.medias[0].storageUrl"
+                  cover
+                ></v-img>
+                <v-card-title class="text-red-darken-2">
+                  {{ item.name }}
+                </v-card-title>
+                <v-card-subtitle> {{ item.unitPrice }} VND</v-card-subtitle>
+              </v-card>
+            </v-lazy>
           </v-col>
         </v-row>
       </v-col>
     </v-row>
 
-    <v-sheet class="mx-auto mt-5" max-width="300">
-      <v-slide-group show-arrows>
+    <v-sheet
+      class="mx-auto mt-5 bg-blue-grey-lighten-5"
+      max-width="240"
+      height="auto"
+      justify="center"
+    >
+      <v-slide-group>
         <v-slide-group-item
-          v-for="n in 4"
+          v-for="n in pageLength"
           :key="n"
           v-slot="{ isSelected, toggle }"
         >
@@ -71,7 +74,10 @@
             :color="isSelected ? 'primary' : undefined"
             class="ma-2"
             rounded
-            @click="getProductsData(n), toggle()"
+            @click="
+              getProductsData(n);
+              toggle;
+            "
           >
             {{ n }}
           </v-btn>
@@ -93,9 +99,13 @@
 .searchBox {
   justify-content: end;
 }
+.min-height-500 {
+  min-height: 50rem;
+}
 </style>
 
 <script>
+import axios from "axios";
 import testComp from "./testComp.vue";
 export default {
   components: {
@@ -104,25 +114,22 @@ export default {
   data() {
     return {
       items: [],
-      filteredItems: [],
+      filterFlag: false,
       currentPage: 1,
       itemsPerPage: 9,
-      categories: ["All", "Men", "Ladies"],
+      categories: [
+        "42e48d19-b2f6-4112-b14f-0b0131b339d5",
+        "f081ab44-7eb4-4ae9-9a35-5dfaf6e82c1c",
+      ],
       pageLength: 0,
       searchValue: "",
       searchArray: [],
     };
   },
-  computed: {
-    pagedProducts() {
-      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-      return this.filteredItems.slice(
-        startIndex,
-        startIndex + this.itemsPerPage
-      );
-    },
-  },
   methods: {
+    productImageSrc(id) {
+      return `/src/assets/${id}.jpg`;
+    },
     searchProducts() {
       if (this.searchValue == "") {
         this.filteredItems = this.items;
@@ -137,53 +144,31 @@ export default {
     onProductClick(item) {
       this.$emit("load-product", item, this.items);
     },
-    filterItems(cate = "All") {
-      if (cate == "All") this.filteredItems = this.items;
-      else
-        this.filteredItems = this.items.filter(
-          (item) => item.Category === cate
-        );
-      this.pages();
-    },
+
     pages() {
       this.pageLength = Math.ceil(36 / this.itemsPerPage);
     },
     changePage(page) {
       this.getProductsData(page);
-      console.log(page);
       this.currentPage = page;
     },
 
-    fakeProductData() {
-      for (let i = 1; i <= 36; i++) {
-        const record = {
-          Id: `ID${i}`,
-          Name: `Product ${i}`,
-          UnitPrice: 200000, // Random price between 1 and 100
-          Description: `Description of Product ${i}`,
-          QuantityInStock: Math.floor(Math.random() * (100 - 1) + 1), // Random quantity between 1 and 100
-          Category: this.categories[(i % 2) + 1], // Assign categories cyclically
-        };
-        this.items.push(record);
-        this.searchArray.push(record.Name);
-      }
-    },
-
     // fetch get product api
-    async getProductsData(page) {
-      console.log(page);
+    async getProductsData(page, categoryId) {
       try {
-        const response = await fetch(
-          "https://main.odour.site/product?currentPage=" + page
+        const response = await axios.get(
+          `https://main.odour.site/product?currentPage=${page}`
         );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+        this.items = response.data.body.products; // Assuming the response is an array of items
+        if (categoryId != null) {
+          this.items.splice(
+            0,
+            this.items.length,
+            ...this.items.filter((item) => categoryId == item.category.id)
+          );
+          this.filterFlag = true;
         }
-        const data = await response.json();
-        this.items = data.body.products; // Assuming the response is an array of items
-        this.filteredItems = this.items;
-        // this.searchArray.push(record.Name);
-        console.log(this.items);
+        this.pageLength = response.data.body.numberOfPage;
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -191,8 +176,6 @@ export default {
   },
   mounted() {
     this.getProductsData(1);
-    // this.fakeProductData();
-    this.filterItems();
     this.pages();
   },
 };
