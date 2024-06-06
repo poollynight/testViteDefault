@@ -1,14 +1,10 @@
 <template>
-  <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    rel="stylesheet"
-  />
   <v-app>
     <v-card>
       <!-- Header -->
       <div class="bg-red-darken-4 app-header" v-if="$vuetify.display.mdAndUp">
         <!-- Top header -->
-        <v-row class="" height="30">
+        <v-row class="" >
           <v-container>
             <v-row class="d-flex" align="center" justify="center">
               <v-col class="text-center"
@@ -30,9 +26,14 @@
               md="3"
               class="text-red-darken-2 d-inline-flex justify-center text-h5"
             >
-              <p class="text-decoration-none font-weight-bold brand-name">
-                ODOUR
-              </p>
+              <router-link
+                class="text-red-darken-2 text-decoration-none font-weight-bold brand-name"
+                to="/"
+              >
+                <p class="text-decoration-none font-weight-bold brand-name">
+                  ODOUR
+                </p>
+              </router-link>
             </v-col>
             <v-col cols="6">
               <v-tabs
@@ -41,14 +42,23 @@
                 align-tabs="center"
                 color="red"
               >
-                <v-tab ref="home" @click="switchTab('Home')"
-                  ><p class="tab">Home</p></v-tab
+                <router-link class="text-decoration-none text-black" to="/">
+                  <v-tab ref="home">
+                    <p class="tab">Home</p>
+                  </v-tab></router-link
                 >
-                <v-tab @click="loadShopTab()"><p class="tab">Shop</p></v-tab>
-                <v-tab @click="switchTab('About')"
-                  ><p class="tab">About</p></v-tab
+
+                <router-link
+                  v-for="(cate, index) in navigatorLg"
+                  :key="index"
+                  :items="cate"
+                  class="text-decoration-none text-black"
+                  :to="cate.value"
                 >
-                <v-tab><p class="tab">Contact</p></v-tab>
+                  <v-tab>
+                    <p class="tab">{{ cate.title }}</p>
+                  </v-tab></router-link
+                >
               </v-tabs>
             </v-col>
             <v-col
@@ -57,22 +67,27 @@
               class="col-3 d-flex justify-space-between"
             >
               <p></p>
-              <v-btn @click="switchTab('Cart')"
-                ><i class="fas fa-shopping-cart"></i
-              ></v-btn>
-              <v-btn @click="switchTab('Login')"
-                ><i class="fas fa-user"></i
-              ></v-btn>
+              <router-link to="/cart" class="text-decoration-none text-black">
+                <v-btn><v-icon class="text-h5">mdi-cart</v-icon></v-btn>
+              </router-link>
+              <router-link to="/login" class="text-decoration-none text-black">
+                <v-btn @click="loadLoginTab"
+                  ><v-icon class="text-h5">mdi-account</v-icon></v-btn>
+              </router-link>
+              <router-link to="/login" class="text-decoration-none">
+                <v-avatar :image="avatar" size="40"></v-avatar>
+              </router-link>
             </v-col>
           </v-row>
         </v-toolbar>
       </div>
+
       <!-- show on small devices -->
       <div v-if="$vuetify.display.smAndDown">
         <v-app-bar color="red-darken-4" prominent>
-          <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"
-            ><i class="fa-solid fa-bars"></i
-          ></v-app-bar-nav-icon>
+          <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer">
+            <v-icon>mdi-format-list-bulleted</v-icon></v-app-bar-nav-icon
+          >
 
           <v-toolbar-title>Odour</v-toolbar-title>
           <v-spacer></v-spacer>
@@ -84,25 +99,26 @@
           temporary
         >
           <v-list>
-            <v-list-item
-              v-for="item in navigator"
-              :key="item.title"
-              @click="switchTab(item.value)"
-            >
-              {{ item.title }}
+            <v-list-item v-for="item in navigator" :key="item.title">
+              <router-link
+                :to="item.value"
+                class="text-decoration-none text-black"
+              >
+                {{ item.title }}
+              </router-link>
             </v-list-item></v-list
           >
         </v-navigation-drawer>
       </div>
-      <v-main class="bg-blue-grey-lighten-5" min-height="100vh">
-        <Shop v-if="ShopSelected" @load-product="loadProductTab"></Shop>
-        <Product
+      <v-main class="bg-blue-grey-lighten-5" min-height="90vh">
+        <!-- <Shop v-if="ShopSelected" @load-product="loadProductTab"></Shop> -->
+        <!-- <Product
           v-if="componentName == 'Product'"
           :item="componentParam"
           :products="products"
         ></Product>
-        <!-- <Register/> -->
-        <component :is="component" />
+        <component :is="component" /> -->
+        <router-view />
       </v-main>
       <Footer></Footer>
     </v-card>
@@ -116,18 +132,19 @@ import Product from "./components/Product.vue";
 import Shop from "./components/Shop.vue";
 import Home from "./components/Home.vue";
 import Footer from "./components/Footer.vue";
-import LoginRegisterBg from "./components/LoginRegisterBg.vue";
 import Register from "./components/Register.vue";
+import test from "./components/testComp.vue";
+// import { ca } from "vuetify/locale";
 export default {
   name: "app",
   components: {
+    test,
     Login,
     Home,
     Footer,
     Shop,
     Product,
     Cart,
-    LoginRegisterBg,
     Register,
   },
 
@@ -139,33 +156,48 @@ export default {
     componentName: null,
     componentParam: null,
     products: [],
+    avatar: null,
 
     drawer: false,
     group: null,
     navigator: [
       {
         title: "Home",
-        value: "Home",
+        value: "/",
       },
       {
         title: "Shop",
-        value: "Shop",
+        value: "/shop/all",
       },
       {
         title: "About",
-        value: "About",
+        value: "/about",
       },
       {
         title: "Contact",
-        value: "Contact",
+        value: "/contact",
       },
       {
         title: "Login",
-        value: "Login",
+        value: "/login",
       },
       {
         title: "Cart",
-        value: "Cart",
+        value: "/cart",
+      },
+    ],
+    navigatorLg: [
+      {
+        title: "Shop",
+        value: "/shop/all",
+      },
+      {
+        title: "About",
+        value: "/about",
+      },
+      {
+        title: "Contact",
+        value: "/contact",
       },
     ],
   }),
@@ -179,13 +211,15 @@ export default {
       this.$refs.home.$el.click();
     },
     switchTab(tab) {
-      this.component = tab;
-      this.ShopSelected = false;
+      if (tab == "Shop") {
+        this.ShopSelected = true;
+        this.component = null;
+      } else {
+        this.component = tab;
+        this.ShopSelected = false;
+      }
+      this.componentParam = null;
       this.componentName = null;
-    },
-    loadShopTab() {
-      this.ShopSelected = true;
-      this.component = null;
     },
     loadProductTab(item, items) {
       this.component = null;
@@ -194,8 +228,22 @@ export default {
       this.ShopSelected = false;
       this.products = items;
     },
+    loadRegisterTab() {
+      this.component = null;
+      this.componentName = "Register";
+      this.componentParam = null;
+      this.ShopSelected = false;
+    },
+    loadLoginTab() {
+      this.component = null;
+      this.componentName = "Login";
+      this.componentParam = null;
+      this.ShopSelected = false;
+    },
   },
-  mounted() {},
+  mounted() {
+    this.avatar = localStorage.getItem("avatar");
+  },
 };
 </script>
 <style>

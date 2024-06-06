@@ -4,11 +4,17 @@
     rel="stylesheet"
   />
   <div>
-    <v-dialog v-model="zoomImage" max-width="800">
+    <v-dialog
+      v-model="zoomImage"
+      max-width="800"
+      justify="center"
+      align="center"
+    >
       <v-img
+        max-width="800"
         height="auto"
         cover
-        :src="productImageSrc(item.id)"
+        :src="item.medias[0].storageUrl"
         :lazy="true"
         @click="showImage = false"
         class="cursor-zoom-in"
@@ -28,18 +34,9 @@
             style="cursor: pointer"
             height="auto"
             cover
-            :src="productImageSrc(item.id)"
-            :lazy="true"
+            :src="item.medias[0].storageUrl"
             @click="zoomImage = !zoomImage"
           ></v-img>
-          <v-dialog>
-            <v-img
-              height="1000px"
-              cover
-              :src="productImageSrc(item.id)"
-              v-model="zoomImage"
-            ></v-img>
-          </v-dialog>
           <v-slide-group
             v-model="model"
             class="mt-10"
@@ -52,7 +49,7 @@
                   height="200"
                   aspect-ratio="16/9"
                   cover
-                  :src="productImageSrc(item.id)"
+                  :src="item.medias[0].storageUrl"
                 ></v-img>
               </v-card>
             </v-slide-group-item>

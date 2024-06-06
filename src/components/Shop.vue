@@ -1,32 +1,36 @@
 <template>
   <v-container class="min-height-500 pa-7">
     <v-row no-gutters class="min-height-500">
-      <v-col cols="3" sm="2" xs="12" class="">
+      <v-col cols="3" sm="1" class="">
         <v-row no-gutters no-wrap>
-          <v-col cols="12" sm="6" xs="3"
-            ><p @click="getProductsData(1)" class="pa-2 hover-link">
-              All
-            </p></v-col
-          >
-          <v-col cols="12" sm="12" xs="3"
-            ><p
-              @click="getProductsData(1, categories[0])"
-              class="pa-2 hover-link"
-            >
-              For Men
-            </p></v-col
-          >
-          <v-col cols="12" sm="12" xs="3"
-            ><p
-              @click="getProductsData(2, categories[1])"
-              class="pa-2 hover-link"
-            >
-              For Ladies
+          <v-col
+            cols="12"
+            sm="12"
+            xs="3"
+            v-for="(cate, n) in categories"
+            :key="n"
+            :item="cate"
+            ><p @click="getProductsData(n, cate.value)" class="pa-2 hover-link">
+              {{ cate.title }}
             </p></v-col
           >
         </v-row>
       </v-col>
-      <v-col>
+      <!-- show on small devices -->
+      <!-- <v-btn color="primary" dark @click="showCategoryMenu"> Dropdown </v-btn>
+      <v-sheet class="text-center">
+        <v-list v-show="showMenu">
+          <v-list-item
+            v-for="(item, index) in categories"
+            :key="index"
+            :item="item"
+          >
+            <v-list-item-title @click="getProductsData(index, item.value)">{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-sheet> -->
+      <!-- end -->
+      <v-col sm="11">
         <v-row>
           <v-col
             v-for="item in this.items"
@@ -35,9 +39,9 @@
             cols="12"
             sm="4"
           >
-            <v-lazy>
-              <v-card
-                class="ma-2 pa-2"
+            <v-skeleton-loader :loading="loading" type="card">
+              <v-responsive
+                class="ma-2 pa-2 cursor-pointer"
                 align="center"
                 justify="center"
                 @click="onProductClick(item)"
@@ -51,8 +55,8 @@
                   {{ item.name }}
                 </v-card-title>
                 <v-card-subtitle> {{ item.unitPrice }} VND</v-card-subtitle>
-              </v-card>
-            </v-lazy>
+              </v-responsive>
+            </v-skeleton-loader>
           </v-col>
         </v-row>
       </v-col>
@@ -113,17 +117,27 @@ export default {
   },
   data() {
     return {
-      items: [],
+      items: [1, 2, 3, 4, 5, 6, 7, 8, 9],
       filterFlag: false,
       currentPage: 1,
       itemsPerPage: 9,
       categories: [
-        "42e48d19-b2f6-4112-b14f-0b0131b339d5",
-        "f081ab44-7eb4-4ae9-9a35-5dfaf6e82c1c",
+        {
+          title: "All",
+          value: "",
+        },
+        {
+          title: "For Men",
+          value: "42e48d19-b2f6-4112-b14f-0b0131b339d5",
+        },
+        {
+          title: "For Ladies",
+          value: "f081ab44-7eb4-4ae9-9a35-5dfaf6e82c1c",
+        },
       ],
       pageLength: 0,
-      searchValue: "",
-      searchArray: [],
+      loading: true,
+      showMenu: false,
     };
   },
   methods: {
@@ -152,15 +166,18 @@ export default {
       this.getProductsData(page);
       this.currentPage = page;
     },
-
+    showCategoryMenu() {
+      this.showMenu = !this.showMenu;
+    },
     // fetch get product api
-    async getProductsData(page, categoryId) {
+    async getProductsData(page, categoryId = "") {
       try {
         const response = await axios.get(
           `https://main.odour.site/product?currentPage=${page}`
         );
         this.items = response.data.body.products; // Assuming the response is an array of items
-        if (categoryId != null) {
+        console.log(this.items);
+        if (categoryId != '') {
           this.items.splice(
             0,
             this.items.length,
@@ -169,6 +186,7 @@ export default {
           this.filterFlag = true;
         }
         this.pageLength = response.data.body.numberOfPage;
+        this.loading = false;
       } catch (error) {
         console.error("Error fetching data:", error);
       }

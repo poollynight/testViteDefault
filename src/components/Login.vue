@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid id="background">
+  <v-container fluid id="" class="background">
     <v-row justify="center">
       <v-col cols="10" md="4" sm="5" justify="center" align="center">
         <v-sheet class="bg-white rounded form">
@@ -32,7 +32,11 @@
                 >
                 <p class="text-center pa-3">
                   Bạn mới biết đến Odour?
-                  <span class="text-red-darken-4 cursor-pointer">Đăng ký</span>
+                  <router-link
+                    to="/register"
+                    class="text-red-darken-4"
+                    >Đăng ký</router-link
+                  >
                 </p>
               </v-col>
             </v-row>
@@ -46,6 +50,7 @@
 <script>
 import axios from "axios";
 export default {
+  name: "Login",
   data() {
     return {
       formVisible: true,
@@ -69,8 +74,9 @@ export default {
         );
 
         // Handle the response here
-        console.log(response.data);
         console.log(response.status);
+        localStorage.setItem("avatar", response.data.body.user.avatarUrl);
+        console.log(response.data.body.accessToken);
       } catch (error) {
         console.error("There was an error!", error);
       }
@@ -79,8 +85,8 @@ export default {
 };
 </script>
 <style>
-#background {
-  background-image: url("/src/assets/carousel_4.jpg");
+.background {
+  background-image: url("https://res.cloudinary.com/dsyysapur/image/upload/v1717643041/ODOUR_EXE/SYSTEM/carousel_4_ewbnny.jpg");
   background-size: cover;
   min-height: 90vh;
 }
