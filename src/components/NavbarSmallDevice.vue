@@ -31,7 +31,7 @@
         </v-list-item>
         <v-list-item v-if="isLogin">
           <!-- quan li gio hang -->
-          <router-link to="/cart" class="text-decoration-none text-black">
+          <router-link to="/user/cart" class="text-decoration-none text-black">
             Giỏ hàng
           </router-link>
         </v-list-item>
@@ -58,7 +58,7 @@ export default {
       isLogin: false,
       drawer: false,
       selfManage: [
-        { title: "Quản lí tài khoản", value: "profile" },
+        { title: "Quản lí tài khoản", value: "user/profile" },
         { title: "Đăng xuất", value: "logout" },
       ],
       navigator: [
@@ -68,7 +68,7 @@ export default {
         },
         {
           title: "Mua sắm",
-          value: "/shop/all",
+          value: "/shop",
         },
         {
           title: "Giới thiệu",

@@ -15,7 +15,7 @@
               {{ user.email }}
             </p>
             <v-divider class="my-3"></v-divider>
-            <router-link to="/profile">
+            <router-link to="/user/profile">
               <v-btn variant="text" rounded>
                 Quản lí tài khoản
               </v-btn></router-link

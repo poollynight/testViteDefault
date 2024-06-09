@@ -63,7 +63,7 @@
           >
             <p></p>
             <router-link
-              to="/cart"
+              to="/user/cart"
               class="text-decoration-none text-black"
               v-if="isLogin"
             >

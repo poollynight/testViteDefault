@@ -45,7 +45,7 @@
             <span class="text-h5">{{ cate }}</span>
           </v-col>
           <v-btn
-            @click="$router.push('/shop/:' + cate)"
+            @click="$router.push('/shop?categoryId=' + (n+1))"
             class="responsive-btn"
             color="red"
           >
