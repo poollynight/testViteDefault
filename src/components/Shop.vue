@@ -1,7 +1,7 @@
 <template>
   <v-container class="min-height-500 pa-7">
     <div class="min-height-500">
-      <v-row no-gutters>
+      <!-- <v-row no-gutters>
         <v-col cols="3" sm="3">Sắp xếp:</v-col>
         <v-col
           class="cursor-pointer mb-5"
@@ -12,7 +12,7 @@
           :item="sortType"
           >gia dam dan</v-col
         >
-      </v-row>
+      </v-row> -->
       <v-row no-gutters>
         <v-col cols="12" sm="12" xs="12">
           <v-select :items="categories" item-title="title" label="Category">
@@ -20,15 +20,14 @@
               <v-list-item
                 v-bind="props"
                 @click="categorySelected(props.value)"
-                ></v-list-item
-              >
+              ></v-list-item>
             </template>
           </v-select>
         </v-col>
       </v-row>
       <v-row>
         <v-col
-          v-for="item in this.products"
+          v-for="item in products"
           :key="item.Id"
           :item="item"
           cols="12"
@@ -57,47 +56,15 @@
           </v-skeleton-loader>
         </v-col>
       </v-row>
-      <v-row>
-        <v-col
-          v-for="item in this.products"
-          :key="item.Id"
-          :item="item"
-          cols="12"
-          sm="4"
-        >
-          <v-skeleton-loader :loading="loading" type="card">
-            <v-responsive
-              class="ma-2 pa-2 cursor-pointer"
-              align="center"
-              justify="center"
-              @click="onProductClick(item.id)"
-            >
-              <v-img
-                max-height="400px"
-                :src="item.medias[0].storageUrl"
-                cover
-              ></v-img>
-              <div class="product-text">
-                <p class="text-red-darken-2 text-h6 product-name">
-                  {{ item.name }}
-                </p>
-                <v-card-subtitle> {{ item.unitPrice }} VND</v-card-subtitle>
-                <v-card-subtitle> {{ item.productStatus }}</v-card-subtitle>
-              </div>
-            </v-responsive>
-          </v-skeleton-loader>
-        </v-col>
-      </v-row>
-      <div class="text-center">
-        <v-pagination
-          v-model="currentPage"
-          :length="pageLength"
-          :total-visible="2"
-          @click="getProductsData(currentPage)"
-        ></v-pagination>
-      </div>
     </div>
-    <router-view></router-view>
+    <div class="text-center">
+      <v-pagination
+        v-model="currentPage"
+        :length="pageLength"
+        :total-visible="2"
+        @click="pageChanged"
+      ></v-pagination>
+    </div>
   </v-container>
 </template>
 
@@ -116,7 +83,7 @@ export default {
   },
   data() {
     return {
-      products: [1, 2, 3, 4, 5, 6],
+      products: [],
       filterFlag: false,
       currentPage: 1,
       itemsPerPage: 9,
@@ -151,19 +118,28 @@ export default {
       showMenu: false,
     };
   },
+  // watch: {
+  //   // getProductDetail
+  //   currentPage() {
+  //     this.getProductsData(this.currentPage);
+  //   },
+  // },
   methods: {
+    pageChanged() {
+      this.getProductsData(this.currentPage);
+    },
     onProductClick(itemId) {
       this.$router.push("/product/" + itemId);
     },
     // fetch get product api
-    async getProductsData() {
+    async getProductsData(page) {
       const sortId = this.$route.query.sortType;
       const cateId = this.$route.query.categoryId;
       this.currentPage = this.$route.query.currentPage;
       var sortType = this.sortTypes[0].value;
       var categoryId = this.categories[0].value;
-      console.log(sortType != null);
-      if (this.currentPage == null) this.currentPage = 1;
+      if (page != null) this.currentPage = page;
+      else if (this.currentPage == null) this.currentPage = 1;
       if (sortId != null) sortType = this.sortTypes[sortId].value;
       if (cateId != null) categoryId = this.categories[cateId].value;
       try {
@@ -180,11 +156,10 @@ export default {
     },
 
     categorySelected(cateId) {
-      const cate = this.categories.find(
-        (category) => category.title === cateId
-      );
-      console.log(cate.value);
-      this.$router.push(`/shop?categoryId=${index}`);
+      // const cate = this.categories.find(
+      //   (category) => category.title === cateId
+      // );
+      // this.$router.push(`/shop?categoryId=${cate}`);
     },
   },
   mounted() {

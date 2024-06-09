@@ -12,7 +12,6 @@ import Profile from './components/Profile.vue'
 import CheckOut from './components/CheckOut.vue'
 import ForgotPassword from './components/ForgotPassword.vue'
 import MyOrders from './components/MyOrders.vue'
-import ShopProductList from './components/ShopProductList.vue'
 import ErrorPage from './components/ErrorPage.vue';
 const routes = [
     {
@@ -53,12 +52,6 @@ const routes = [
     {
         path: '/shop',
         component: Shop,
-        children: [
-            {
-                path: '/list',
-                component: ShopProductList
-            }
-        ]
     },
     
     {
@@ -79,8 +72,6 @@ const routes = [
         component: ErrorPage
     },
 ]
-
-
 
 const router = createRouter({
     history: createWebHistory(),
