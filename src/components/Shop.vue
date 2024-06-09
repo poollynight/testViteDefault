@@ -20,7 +20,7 @@
               <v-list-item
                 v-bind="props"
                 @click="categorySelected(props.value)"
-                >{{ props.value }}</v-list-item
+                ></v-list-item
               >
             </template>
           </v-select>
@@ -88,15 +88,16 @@
           </v-skeleton-loader>
         </v-col>
       </v-row>
+      <div class="text-center">
+        <v-pagination
+          v-model="currentPage"
+          :length="pageLength"
+          :total-visible="2"
+          @click="getProductsData(currentPage)"
+        ></v-pagination>
+      </div>
     </div>
-    <div class="text-center">
-      <v-pagination
-        v-model="currentPage"
-        :length="pageLength"
-        :total-visible="2"
-        @click="getProductsData(currentPage)"
-      ></v-pagination>
-    </div>
+    <router-view></router-view>
   </v-container>
 </template>
 
@@ -179,9 +180,10 @@ export default {
     },
 
     categorySelected(cateId) {
-      const index = this.categories.findIndex(
+      const cate = this.categories.find(
         (category) => category.title === cateId
       );
+      console.log(cate.value);
       this.$router.push(`/shop?categoryId=${index}`);
     },
   },

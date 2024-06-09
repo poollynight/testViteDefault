@@ -55,7 +55,7 @@ const routes = [
         component: Shop,
         children: [
             {
-                path: '',
+                path: '/list',
                 component: ShopProductList
             }
         ]
