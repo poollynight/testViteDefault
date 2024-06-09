@@ -16,7 +16,15 @@
             </p>
             <v-divider class="my-3"></v-divider>
             <router-link to="/profile">
-              <v-btn variant="text" rounded> Quản lí tài khoản </v-btn></router-link
+              <v-btn variant="text" rounded>
+                Quản lí tài khoản
+              </v-btn></router-link
+            >
+            <v-divider class="my-3"></v-divider>
+            <router-link to="/profile">
+              <v-btn variant="text" rounded>
+                Đơn hàng của tôi
+              </v-btn></router-link
             >
             <v-divider class="my-3"></v-divider>
             <router-link to="/logout" class="text-decoration-none text-red">

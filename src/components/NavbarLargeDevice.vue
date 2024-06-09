@@ -91,7 +91,7 @@
   </div>
 </template>
 <script>
-import ProfileIcon from "./ProfileIcon.vue";
+import ProfileIcon from "./NavbarProfileIcon.vue";
 
 export default {
   components: {
@@ -104,7 +104,7 @@ export default {
       navigatorLg: [
         {
           title: "Mua sắm",
-          value: "/shop/all",
+          value: "/shop",
         },
         {
           title: "Giới thiệu",

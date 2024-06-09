@@ -1,109 +1,99 @@
 <template>
   <v-container class="min-height-500 pa-7">
-    <v-row no-gutters class="min-height-500">
-      <v-col cols="3" sm="1" class="">
-        <v-row no-gutters no-wrap>
-          <v-col
-            cols="12"
-            sm="12"
-            xs="3"
-            v-for="(cate, n) in categories"
-            :key="n"
-            :item="cate"
-          >
-            <router-link
-              :to="'/shop/' + cate.title"
-              class="text-decoration-none"
-            >
-              <p
-                @click="getProductsData(n, cate.value)"
-                class="pa-2 hover-link"
-              >
-                {{ cate.title }}
-              </p>
-            </router-link></v-col
-          >
-        </v-row>
-      </v-col>
-      <!-- show on small devices -->
-      <!-- <v-btn color="primary" dark @click="showCategoryMenu"> Dropdown </v-btn>
-      <v-sheet class="text-center">
-        <v-list v-show="showMenu">
-          <v-list-item
-            v-for="(item, index) in categories"
-            :key="index"
-            :item="item"
-          >
-            <v-list-item-title @click="getProductsData(index, item.value)">{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-sheet> -->
-      <!-- end -->
-      <v-col sm="11">
-        <v-row>
-          <v-col
-            v-for="item in this.items"
-            :key="item.Id"
-            :item="item"
-            cols="12"
-            sm="4"
-          >
-            <v-skeleton-loader :loading="loading" type="card">
-              <v-responsive
-                class="ma-2 pa-2 cursor-pointer"
-                align="center"
-                justify="center"
-                @click="onProductClick(item.id)"
-              >
-                <v-img
-                  max-height="400px"
-                  :src="item.medias[0].storageUrl"
-                  cover
-                ></v-img>
-                <div class="product-text">
-                  <p class="text-red-darken-2 text-h7 product-name">
-                    {{ item.name }}
-                  </p>
-                  <v-card-subtitle> {{ item.unitPrice }} VND</v-card-subtitle>
-                </div>
-              </v-responsive>
-            </v-skeleton-loader>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-
-    <!-- <v-sheet
-      class="mx-auto mt-5 bg-blue-grey-lighten-5"
-      max-width="320"
-      height="auto"
-      justify="center"
-    >
-      <v-slide-group>
-        <v-slide-group-item
-          v-for="n in pageLength"
-          :key="n"
-          v-slot="{ isSelected, toggle }"
+    <div class="min-height-500">
+      <v-row no-gutters>
+        <v-col cols="3" sm="3">Sắp xếp:</v-col>
+        <v-col
+          class="cursor-pointer mb-5"
+          cols="3"
+          sm="2"
+          v-for="{ sortType, index } in sortTypes"
+          :key="index"
+          :item="sortType"
+          >gia dam dan</v-col
         >
-          <v-btn
-            :color="isSelected ? 'primary' : undefined"
-            class="ma-2"
-            rounded
-            @click="
-              getProductsData(n);
-              toggle;
-            "
-          >
-            {{ n }}
-          </v-btn>
-        </v-slide-group-item>
-      </v-slide-group>
-    </v-sheet> -->
+      </v-row>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" xs="12">
+          <v-select :items="categories" item-title="title" label="Category">
+            <template v-slot:item="{ props }">
+              <v-list-item
+                v-bind="props"
+                @click="categorySelected(props.value)"
+                >{{ props.value }}</v-list-item
+              >
+            </template>
+          </v-select>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col
+          v-for="item in this.products"
+          :key="item.Id"
+          :item="item"
+          cols="12"
+          sm="4"
+        >
+          <v-skeleton-loader :loading="loading" type="card">
+            <v-responsive
+              class="ma-2 pa-2 cursor-pointer"
+              align="center"
+              justify="center"
+              @click="onProductClick(item.id)"
+            >
+              <v-img
+                max-height="400px"
+                :src="item.medias[0].storageUrl"
+                cover
+              ></v-img>
+              <div class="product-text">
+                <p class="text-red-darken-2 text-h6 product-name">
+                  {{ item.name }}
+                </p>
+                <v-card-subtitle> {{ item.unitPrice }} VND</v-card-subtitle>
+                <v-card-subtitle> {{ item.productStatus }}</v-card-subtitle>
+              </div>
+            </v-responsive>
+          </v-skeleton-loader>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col
+          v-for="item in this.products"
+          :key="item.Id"
+          :item="item"
+          cols="12"
+          sm="4"
+        >
+          <v-skeleton-loader :loading="loading" type="card">
+            <v-responsive
+              class="ma-2 pa-2 cursor-pointer"
+              align="center"
+              justify="center"
+              @click="onProductClick(item.id)"
+            >
+              <v-img
+                max-height="400px"
+                :src="item.medias[0].storageUrl"
+                cover
+              ></v-img>
+              <div class="product-text">
+                <p class="text-red-darken-2 text-h6 product-name">
+                  {{ item.name }}
+                </p>
+                <v-card-subtitle> {{ item.unitPrice }} VND</v-card-subtitle>
+                <v-card-subtitle> {{ item.productStatus }}</v-card-subtitle>
+              </div>
+            </v-responsive>
+          </v-skeleton-loader>
+        </v-col>
+      </v-row>
+    </div>
     <div class="text-center">
       <v-pagination
         v-model="currentPage"
         :length="pageLength"
-        :total-visible="7"
+        :total-visible="2"
         @click="getProductsData(currentPage)"
       ></v-pagination>
     </div>
@@ -111,24 +101,8 @@
 </template>
 
 <style>
-.hover-link:hover {
-  cursor: pointer;
-  color: red;
-}
-.fixed-col {
-  position: fixed;
-  z-index: 1000;
-}
-.searchBox {
-  justify-content: end;
-}
 .min-height-500 {
   min-height: 50rem;
-}
-@media screen and (max-width: 780px) and (min-width: 600px) {
-  .product-name {
-    font-size: 0.7em;
-  }
 }
 </style>
 
@@ -141,10 +115,22 @@ export default {
   },
   data() {
     return {
-      items: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      products: [1, 2, 3, 4, 5, 6],
       filterFlag: false,
       currentPage: 1,
       itemsPerPage: 9,
+      sortTypes: [
+        {
+          title: "Tên A-Z",
+          value: "prod:name:desc",
+        },
+        {
+          title: "Tên Z-A",
+          value: "prod:name:asc",
+        },
+        { title: "Giá giảm dần", value: "prod:price:desc" },
+        { title: "Giá tăng dần", value: "prod:price:asc" },
+      ],
       categories: [
         {
           title: "All",
@@ -165,57 +151,42 @@ export default {
     };
   },
   methods: {
-    searchProducts() {
-      if (this.searchValue == "") {
-        this.filteredItems = this.items;
-        this.pages();
-        return;
-      }
-      this.filteredItems = this.items.filter((item) =>
-        item.Name.includes(this.searchValue)
-      );
-      this.pages();
-    },
     onProductClick(itemId) {
       this.$router.push("/product/" + itemId);
     },
-
-    pages() {
-      this.pageLength = Math.ceil(36 / this.itemsPerPage);
-    },
-    changePage(page) {
-      this.getProductsData(page);
-      this.currentPage = page;
-    },
-    showCategoryMenu() {
-      this.showMenu = !this.showMenu;
-    },
     // fetch get product api
-    async getProductsData(page, categoryId = "") {
+    async getProductsData() {
+      const sortId = this.$route.query.sortType;
+      const cateId = this.$route.query.categoryId;
+      this.currentPage = this.$route.query.currentPage;
+      var sortType = this.sortTypes[0].value;
+      var categoryId = this.categories[0].value;
+      console.log(sortType != null);
+      if (this.currentPage == null) this.currentPage = 1;
+      if (sortId != null) sortType = this.sortTypes[sortId].value;
+      if (cateId != null) categoryId = this.categories[cateId].value;
       try {
         const response = await axios.get(
-          `https://main.odour.site/product?currentPage=${page}`
+          `https://main.odour.site/product?currentPage=${this.currentPage}&sortType=${sortType}&categoryId=${categoryId}`
         );
-        console.log(response);
-        this.items = response.data.body.products; // Assuming the response is an array of items
-        if (categoryId != "") {
-          this.items.splice(
-            0,
-            this.items.length,
-            ...this.items.filter((item) => categoryId == item.category.id)
-          );
-          this.filterFlag = true;
-        }
+        this.products = response.data.body.products; // Assuming the response is an array of items
         this.pageLength = response.data.body.numberOfPage;
         this.loading = false;
+        console.log(this.products);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     },
+
+    categorySelected(cateId) {
+      const index = this.categories.findIndex(
+        (category) => category.title === cateId
+      );
+      this.$router.push(`/shop?categoryId=${index}`);
+    },
   },
   mounted() {
-    this.getProductsData(1);
-    this.pages();
+    this.getProductsData();
   },
 };
 </script>

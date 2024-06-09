@@ -11,14 +11,13 @@
         height="auto"
         cover
         :src="product.medias[0].storageUrl"
-        :lazy="true"
         @click="showImage = false"
         class="cursor-zoom-in"
       ></v-img>
     </v-dialog>
   </div>
   <v-container>
-    <v-skeleton-loader :loading="loading" type="">
+    <v-skeleton-loader :loading="loading" type="card">
       <v-row no-gutters>
         <v-col cols="12" sm="5" align="center">
           <v-responsive
@@ -45,7 +44,7 @@
                     height="200"
                     aspect-ratio="16/9"
                     cover
-                    :src="product.medias[0].storageUrl"
+                    v-bind:src="product.medias[0].storageUrl"
                   ></v-img>
                 </v-card>
               </v-slide-group-item>
@@ -60,6 +59,7 @@
           <v-responsive class="text-left pa-8">
             <div>
               <p class="ProName">{{ product.name }}</p>
+              <p>Dành cho: {{ product.category.name }}</p>
             </div>
             <v-sheet height="4rem" class="bg-grey-lighten-4 d-flex">
               <p class="ProName mt-3 pl-5 text-red-darken-2">
@@ -121,17 +121,54 @@
     </v-skeleton-loader>
   </v-container>
 
-  <!-- Other products -->
-  <!-- <v-container class="mx-auto" max-width="1000">
-    <v-sheet class="pa-2">
-      <p class="text-h5">CÓ THỂ BẠN CŨNG THÍCH</p>
-      <v-slide-group show-arrows>
-        <v-slide-group-item v-for="pro in otherProducts" :key="pro.id">
-          123
-        </v-slide-group-item>
-      </v-slide-group>
-    </v-sheet>
-  </v-container> -->
+  <v-container>
+    <h2>Sản phẩm liên quan</h2>
+    <v-slide-group
+      v-model="model"
+      class="pt-4"
+      selected-class="bg-success"
+      show-arrows
+    >
+      <v-slide-group-item
+        v-for="(item, index) in relatedProducts"
+        :key="index"
+        :item="item"
+      >
+        <v-skeleton-loader
+          :loading="relatedLoading"
+          type="card"
+          width="300"
+          class="ma-4"
+        >
+          <v-responsive
+            class="ma-4 text-center"
+            color="grey-lighten-1"
+            height="350"
+            width="290"
+            @click="
+              onProductClick(item.id);
+              toggle;
+            "
+          >
+            <v-img
+              max-height="250px"
+              :src="item.medias[0].storageUrl"
+              cover
+            ></v-img>
+            <div class="product-text">
+              <p class="text-h6 text-black">{{ item.name }}</p>
+              <v-card-subtitle class="text-red text-h6">
+                {{ item.unitPrice }} VND</v-card-subtitle
+              >
+              <v-card-subtitle class="text-black text-h8">
+                {{ item.productStatus }}</v-card-subtitle
+              >
+            </div>
+          </v-responsive>
+        </v-skeleton-loader>
+      </v-slide-group-item>
+    </v-slide-group>
+  </v-container>
 </template>
 
 <style>
@@ -165,10 +202,14 @@ export default {
     quantity: 1,
     product: null,
     loading: true,
+    relatedLoading: true,
     model: null,
     billNumber: 1,
+    relatedProducts: [1, 2, 3],
   }),
-
+  watch: {
+    // getProductDetail
+  },
   methods: {
     productImageSrc(id) {
       return `/src/assets/${id}.jpg`;
@@ -188,31 +229,50 @@ export default {
         product: this.product.id,
         quantity: this.quantity,
       };
-      const billNumber = this.$cookies.keys().filter((key) => key.startsWith("cart")).length +1;
+      const billNumber =
+        this.$cookies.keys().filter((key) => key.startsWith("cart")).length + 1;
       const jsonBill = JSON.stringify(bill);
       this.$cookies.set("cart" + email + billNumber, jsonBill, "30d", "/");
     },
     async getProductDetail() {
+      const itemId = this.$route.params.id;
+      console.log(itemId);
       try {
-        const itemId = this.$route.params.id;
         const response = await axios.get(
           `https://main.odour.site/product/${itemId}`
         );
         this.product = response.data.body.product;
+        this.getRelatedProducts();
         const description = JSON.parse(this.product.description);
         this.nhomHuong = description.NHOM_HUONG[0];
         this.tangHuongDau = description.TANG_HUONG.HUONG_DAU;
         this.tangHuongGiua = description.TANG_HUONG.HUONG_GIUA;
         this.tangHuongCuoi = description.TANG_HUONG.HUONG_CUOI;
         this.loading = false;
+        console.log(this.product);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     },
+    async getRelatedProducts() {
+      try {
+        const res = await axios.get(
+          "https://main.odour.site/product/related/" + this.product.category.id
+        );
+        this.relatedProducts = res.data.body.products;
+        this.relatedLoading = false;
+        console.log(this.relatedProducts);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    onProductClick(itemId) {
+      this.$router.push("/product/" + itemId);
+      this.getProductDetail();
+    },
   },
   mounted() {
     this.getProductDetail();
-    console.log();
   },
 };
 </script>

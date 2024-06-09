@@ -32,14 +32,8 @@
         cols="12"
         sm="4"
         class="pa-6"
-        
       >
-        <v-sheet
-          class="pa-2"
-          align="center"
-          justify="center"
-          max-width="320"
-        >
+        <v-sheet class="pa-2" align="center" justify="center" height="350" max-width="320">
           <v-img
             min-width="auto"
             max-height="363"
@@ -47,8 +41,8 @@
             class="category"
             alt=""
           ></v-img>
-          <v-col cols="12" class="text-center">
-            <span>{{ cate }}</span>
+          <v-col cols="12" class="text-center pa-4" >
+            <span class="text-h5">{{ cate }}</span>
           </v-col>
           <v-btn
             @click="$router.push('/shop/:' + cate)"
@@ -66,6 +60,7 @@
 <script>
 import HotTrend from "./HomeHotTrend.vue";
 import NewProduct from "./HomeNewProduct.vue";
+import axios from "axios";
 export default {
   components: {
     HotTrend,
@@ -73,6 +68,7 @@ export default {
   },
   data() {
     return {
+      hotProducts: [],
       categories: ["For Men", "For Ladies", "Gift Set"],
       images: [
         "https://res.cloudinary.com/dsyysapur/image/upload/v1717643040/ODOUR_EXE/SYSTEM/cate-men_lmimzr.webp",
@@ -94,6 +90,20 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    async getHomeProducts() {
+      try {
+        const res = await axios.get("https://main.odour.site/product/home");
+        this.hotProducts = res.data.body.newProducts;
+        console.log(this.hotProducts);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  mounted() {
+    this.getHomeProducts();
   },
 };
 </script>

@@ -11,6 +11,8 @@ import Logout from './components/Logout.vue'
 import Profile from './components/Profile.vue'
 import CheckOut from './components/CheckOut.vue'
 import ForgotPassword from './components/ForgotPassword.vue'
+import MyOrders from './components/MyOrders.vue'
+import ShopProductList from './components/ShopProductList.vue'
 import ErrorPage from './components/ErrorPage.vue';
 const routes = [
     {
@@ -18,7 +20,7 @@ const routes = [
         component: Home
     },
     {
-        path: '/cart',
+        path: '/user/cart',
         component: Cart,
         meta: { requiresAuth: true } 
     },
@@ -26,6 +28,11 @@ const routes = [
         path: '/checkout',
         component: CheckOut,
         meta: { requiresAuth: true } 
+    },
+    {
+        path: '/myOrders',
+        component: MyOrders,
+        // meta: { requiresAuth: true }
     },
     {
         path: '/confirmEmail',
@@ -44,20 +51,28 @@ const routes = [
         component: Register
     },
     {
-        path: '/shop/:category',
-        component: Shop
+        path: '/shop',
+        component: Shop,
+        children: [
+            {
+                path: '',
+                component: ShopProductList
+            }
+        ]
     },
+    
     {
         path: '/product/:id',
         component: Product
     },
     {
-        path: '/profile',
+        path: '/user/profile',
         component: Profile
     },
     {
         path: '/logout',
-        component: Logout
+        component: Logout,
+        meta: { requiresAuth: true }
     },
     {
         path: '/:catchAll(.*)',

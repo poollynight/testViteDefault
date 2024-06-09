@@ -122,6 +122,7 @@ export default {
     },
     removeItem(index) {
       this.cartItems.splice(index, 1);
+      this.$cookies.remove("cart" + this.$cookies.get("e") + index);
       this.calculateTotal(this.cartItems);
     },
     calculateTotal(items) {
