@@ -10,9 +10,18 @@
             v-for="(cate, n) in categories"
             :key="n"
             :item="cate"
-            ><p @click="getProductsData(n, cate.value)" class="pa-2 hover-link">
-              {{ cate.title }}
-            </p></v-col
+          >
+            <router-link
+              :to="'/shop/' + cate.title"
+              class="text-decoration-none"
+            >
+              <p
+                @click="getProductsData(n, cate.value)"
+                class="pa-2 hover-link"
+              >
+                {{ cate.title }}
+              </p>
+            </router-link></v-col
           >
         </v-row>
       </v-col>
@@ -44,17 +53,19 @@
                 class="ma-2 pa-2 cursor-pointer"
                 align="center"
                 justify="center"
-                @click="onProductClick(item)"
+                @click="onProductClick(item.id)"
               >
                 <v-img
                   max-height="400px"
                   :src="item.medias[0].storageUrl"
                   cover
                 ></v-img>
-                <v-card-title class="text-red-darken-2">
-                  {{ item.name }}
-                </v-card-title>
-                <v-card-subtitle> {{ item.unitPrice }} VND</v-card-subtitle>
+                <div class="product-text">
+                  <p class="text-red-darken-2 text-h7 product-name">
+                    {{ item.name }}
+                  </p>
+                  <v-card-subtitle> {{ item.unitPrice }} VND</v-card-subtitle>
+                </div>
               </v-responsive>
             </v-skeleton-loader>
           </v-col>
@@ -62,9 +73,9 @@
       </v-col>
     </v-row>
 
-    <v-sheet
+    <!-- <v-sheet
       class="mx-auto mt-5 bg-blue-grey-lighten-5"
-      max-width="240"
+      max-width="320"
       height="auto"
       justify="center"
     >
@@ -87,7 +98,15 @@
           </v-btn>
         </v-slide-group-item>
       </v-slide-group>
-    </v-sheet>
+    </v-sheet> -->
+    <div class="text-center">
+      <v-pagination
+        v-model="currentPage"
+        :length="pageLength"
+        :total-visible="7"
+        @click="getProductsData(currentPage)"
+      ></v-pagination>
+    </div>
   </v-container>
 </template>
 
@@ -105,6 +124,11 @@
 }
 .min-height-500 {
   min-height: 50rem;
+}
+@media screen and (max-width: 780px) and (min-width: 600px) {
+  .product-name {
+    font-size: 0.7em;
+  }
 }
 </style>
 
@@ -124,7 +148,7 @@ export default {
       categories: [
         {
           title: "All",
-          value: "",
+          value: "7b513726-d8a9-4849-b797-4e31a34c378f",
         },
         {
           title: "For Men",
@@ -141,9 +165,6 @@ export default {
     };
   },
   methods: {
-    productImageSrc(id) {
-      return `/src/assets/${id}.jpg`;
-    },
     searchProducts() {
       if (this.searchValue == "") {
         this.filteredItems = this.items;
@@ -155,8 +176,8 @@ export default {
       );
       this.pages();
     },
-    onProductClick(item) {
-      this.$emit("load-product", item, this.items);
+    onProductClick(itemId) {
+      this.$router.push("/product/" + itemId);
     },
 
     pages() {
@@ -175,9 +196,9 @@ export default {
         const response = await axios.get(
           `https://main.odour.site/product?currentPage=${page}`
         );
+        console.log(response);
         this.items = response.data.body.products; // Assuming the response is an array of items
-        console.log(this.items);
-        if (categoryId != '') {
+        if (categoryId != "") {
           this.items.splice(
             0,
             this.items.length,

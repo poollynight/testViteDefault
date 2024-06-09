@@ -30,11 +30,10 @@
                 ><v-btn width="100%" type="submit" color="red-darken-2"
                   >Đăng nhập</v-btn
                 >
+                <p class="text-center pa-3"><router-link class="text-red-darken-4" to="/forgotPassword">Quên mật khẩu?</router-link></p>
                 <p class="text-center pa-3">
                   Bạn mới biết đến Odour?
-                  <router-link
-                    to="/register"
-                    class="text-red-darken-4"
+                  <router-link to="/register" class="text-red-darken-4"
                     >Đăng ký</router-link
                   >
                 </p>
@@ -61,6 +60,12 @@ export default {
     };
   },
   methods: {
+    checkLogin() {
+      if (this.$cookies.get("ato")) {
+        this.$isLogin = true;
+        this.$router.push("/");
+      }
+    },
     async Login() {
       try {
         // Make your login request here using axios or any other library
@@ -74,13 +79,24 @@ export default {
         );
 
         // Handle the response here
-        console.log(response.status);
         localStorage.setItem("avatar", response.data.body.user.avatarUrl);
-        console.log(response.data.body.accessToken);
+        $cookies.set("ato", response.data.body.accessToken, "30d", "/");
+        $cookies.set("e", response.data.body.user.email, "30d", "/");
+        $cookies.set(
+          "confe",
+          response.data.body.user.emailConfirmed,
+          "30d",
+          "/"
+        );
+        this.$isLogin = true; // global variable
+        location.reload();
       } catch (error) {
         console.error("There was an error!", error);
       }
     },
+  },
+  mounted() {
+    this.checkLogin();
   },
 };
 </script>

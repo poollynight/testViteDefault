@@ -7,22 +7,25 @@ import Login from './components/Login.vue'
 import Product from './components/Product.vue'
 import Register from './components/Register.vue'
 import Shop from './components/Shop.vue'
+import Logout from './components/Logout.vue'
+import Profile from './components/Profile.vue'
+import CheckOut from './components/CheckOut.vue'
+import ForgotPassword from './components/ForgotPassword.vue'
+import ErrorPage from './components/ErrorPage.vue';
 const routes = [
     {
         path: '/',
         component: Home
     },
-    // {
-    //     path: '/about',
-    //     component: About
-    // },
-    // {
-    //     path: '/contact',
-    //     component: Contact
-    // },
     {
         path: '/cart',
-        component: Cart
+        component: Cart,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/checkout',
+        component: CheckOut,
+        meta: { requiresAuth: true } 
     },
     {
         path: '/confirmEmail',
@@ -31,6 +34,10 @@ const routes = [
     {
         path: '/login',
         component: Login
+    },
+    {
+        path: '/forgotPassword',
+        component: ForgotPassword
     },
     {
         path: '/register',
@@ -45,10 +52,20 @@ const routes = [
         component: Product
     },
     {
+        path: '/profile',
+        component: Profile
+    },
+    {
+        path: '/logout',
+        component: Logout
+    },
+    {
         path: '/:catchAll(.*)',
-        component: Error
+        component: ErrorPage
     },
 ]
+
+
 
 const router = createRouter({
     history: createWebHistory(),

@@ -35,10 +35,6 @@
               <!-- Add more profile information fields here -->
             </v-row>
           </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" @click="editProfile">Edit Profile</v-btn>
-            <v-btn color="error" @click="logout">Logout</v-btn>
-          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>

@@ -38,9 +38,7 @@
                 >
                 <p class="text-center pa-3">
                   Bạn đã có tài khoản?
-                  <router-link
-                    to="/login"
-                    class="text-red-darken-4"
+                  <router-link to="/login" class="text-red-darken-4"
                     >Đăng nhập</router-link
                   >
                 </p>
@@ -110,7 +108,8 @@
                   size="50"
                   app
                   appear
-                  ><v-icon>mdi-check</v-icon></v-fab>
+                  ><v-icon>mdi-check</v-icon></v-fab
+                >
               </div>
             </template>
             <p class="text-center pa-4">
@@ -119,7 +118,14 @@
                 >Nếu không tài khoản sẽ bị xóa!</strong
               >
             </p>
-            <v-btn @click="loadSuccessDialog = false" class="mb-1">Đóng</v-btn>
+            <v-btn
+              @click="
+                loadSuccessDialog = false;
+                $route.push('/login');
+              "
+              class="mb-1"
+              >Đóng</v-btn
+            >
           </v-list-item>
         </v-list>
       </v-dialog>
@@ -139,20 +145,19 @@ export default {
       password: "",
       confirmPassword: "",
       emailRules: [
-        (v) => !!v || "Email is required",
-        (v) => /.+@.+\..+/.test(v) || "Email must be valid",
+        (v) => !!v || "Email không được để trống",
+        (v) => /.+@.+\..+/.test(v) || "Email sai định dạng",
       ],
       passwordRules: [
-        (v) => !!v || "Password is required",
+        (v) => !!v || "Mật khẩu không được để trống",
         (v) =>
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/.test(v) ||
-          "Password must like Ab123",
+          "Mật khẩu phải đúng định dạng. VD: Ab123",
       ],
     };
   },
   methods: {
     async register() {
-      this.loadDialog = true;
       if (
         this.password === "" ||
         this.confirmPassword === "" ||
@@ -160,6 +165,7 @@ export default {
       )
         return;
       if (this.password === this.confirmPassword) {
+        this.loadDialog = true;
         try {
           const response = await axios.post(
             "https://main.odour.site/auth/register",
@@ -170,6 +176,8 @@ export default {
             }
           );
           console.log("Registration successful!", response.data);
+          this.loadDialog = false;
+          this.loadSuccessDialog = true;
         } catch (error) {
           if (error.response) {
             // The request was made and the server responded with a status code
@@ -189,15 +197,15 @@ export default {
     },
   },
   watch: {
-    loadDialog(val) {
-      if (!val) return;
-      setTimeout(() => (this.loadDialog = false), 2000);
-      setTimeout(() => (this.loadSuccessDialog = true), 2000);
-    },
-    // loadSuccessDialog(val) {
+    // loadDialog(val) {
     //   if (!val) return;
-    //   setTimeout(() => (this.loadSuccessDialog = false), 2000);
+    //   setTimeout(() => (this.loadDialog = false), 2000);
+    //   setTimeout(() => (this.loadSuccessDialog = true), 2000);
     // },
+    loadSuccessDialog(val) {
+      if (!val) return;
+      setTimeout(() => (this.loadSuccessDialog = false), 3000);
+    },
   },
 };
 </script>

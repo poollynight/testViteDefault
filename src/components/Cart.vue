@@ -1,150 +1,174 @@
 <template>
   <v-container>
-    <v-data-table
-      :custom-filter="filterText"
-      :headers="headers"
-      :items="items"
-      :search="search"
-      item-value="name"
-    >
-      <template v-slot:top>
-        <v-text-field
-          width="250"
-          v-model="search"
-          class="pa-2"
-          label="Search"
-        ></v-text-field>
-      </template>
-    </v-data-table>
+    <v-card class="elevation-2">
+      <v-card-title class="headline">Shopping Cart</v-card-title>
+      <v-divider></v-divider>
+      <v-card-text>
+        <v-row align="center">
+          <v-col cols="1"><strong></strong></v-col>
+          <v-col cols="3"><strong>Product</strong></v-col>
+          <v-col cols="2"><strong>Price</strong></v-col>
+          <v-col cols="2"><strong>Quantity</strong></v-col>
+          <v-col cols="2"><strong>Total</strong></v-col>
+          <v-col cols="1"><strong>Action</strong></v-col>
+        </v-row>
+        <v-row v-for="(item, index) in cartItems" :key="index" align="center">
+          <v-col cols="1">
+            <v-checkbox
+              v-model="item.selected"
+              @change="updateSelection(selectedItems)"
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="3">
+            <v-col cols="9">
+              <div>{{ item.name }}</div>
+            </v-col>
+          </v-col>
+          <v-col cols="2">{{ item.price }} VND</v-col>
+          <v-col cols="2">
+            <v-text-field
+              v-model="item.quantity"
+              outlined
+              dense
+              @input="updateQuantity(item)"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="2">{{ calculateItemTotal(item) }}</v-col>
+          <v-col cols="1">
+            <v-btn icon @click="removeItem(index)">
+              <v-icon color="error">mdi-delete</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-col cols="8">
+          <v-row align="center">
+            <v-col cols="4">
+              <v-checkbox
+                v-model="selectAll"
+                :true-value="true"
+                :false-value="false"
+                label="Select All"
+                @click="toggleAll"
+              ></v-checkbox>
+            </v-col>
+            <v-col cols="4">
+              <h3>Product(s)</h3>
+              <p>{{ totalQuantity }}</p>
+            </v-col>
+            <v-col cols="4">
+              <h3>Total</h3>
+              <p>{{ totalPrice }}</p>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="3" class="text-right">
+          <v-btn color="primary" @click="checkout">Checkout</v-btn>
+        </v-col>
+      </v-card-actions>
+    </v-card>
   </v-container>
 </template>
-<script>
-export default {
-  data: () => ({
-    search: "",
-    headers: [
-      {
-        title: "CPU Model",
-        align: "start",
-        key: "name",
-      },
-      {
-        title: "Cores",
-        align: "end",
-        key: "cores",
-      },
-      {
-        title: "Threads",
-        align: "end",
-        key: "threads",
-      },
-      {
-        title: "Base Clock",
-        align: "end",
-        key: "baseClock",
-      },
-      {
-        title: "Boost Clock",
-        align: "end",
-        key: "boostClock",
-      },
-      {
-        title: "TDP (W)",
-        align: "end",
-        key: "tdp",
-      },
-    ],
-    items: [
-      {
-        name: "Intel Core i9-11900K",
-        cores: 8,
-        threads: 16,
-        baseClock: "3.5 GHz",
-        boostClock: "5.3 GHz",
-        tdp: "125W",
-      },
-      {
-        name: "AMD Ryzen 9 5950X",
-        cores: 16,
-        threads: 32,
-        baseClock: "3.4 GHz",
-        boostClock: "4.9 GHz",
-        tdp: "105W",
-      },
-      {
-        name: "Intel Core i7-10700K",
-        cores: 8,
-        threads: 16,
-        baseClock: "3.8 GHz",
-        boostClock: "5.1 GHz",
-        tdp: "125W",
-      },
-      {
-        name: "AMD Ryzen 5 5600X",
-        cores: 6,
-        threads: 12,
-        baseClock: "3.7 GHz",
-        boostClock: "4.6 GHz",
-        tdp: "65W",
-      },
-      {
-        name: "Intel Core i5-10600K",
-        cores: 6,
-        threads: 12,
-        baseClock: "4.1 GHz",
-        boostClock: "4.8 GHz",
-        tdp: "125W",
-      },
-      {
-        name: "AMD Ryzen 7 5800X",
-        cores: 8,
-        threads: 16,
-        baseClock: "3.8 GHz",
-        boostClock: "4.7 GHz",
-        tdp: "105W",
-      },
-      {
-        name: "Intel Core i3-10100",
-        cores: 4,
-        threads: 8,
-        baseClock: "3.6 GHz",
-        boostClock: "4.3 GHz",
-        tdp: "65W",
-      },
-      {
-        name: "AMD Ryzen 3 3300X",
-        cores: 4,
-        threads: 8,
-        baseClock: "3.8 GHz",
-        boostClock: "4.3 GHz",
-        tdp: "65W",
-      },
-      {
-        name: "Intel Pentium Gold G6400",
-        cores: 2,
-        threads: 4,
-        baseClock: "4.0 GHz",
-        tdp: "58W",
-      },
-      {
-        name: "AMD Athlon 3000G",
-        cores: 2,
-        threads: 4,
-        baseClock: "3.5 GHz",
-        tdp: "35W",
-      },
-    ],
-  }),
 
+<script>
+import axios from "axios";
+export default {
+  data() {
+    return {
+      cartItems: [],
+      productWanted: [],
+      productSelected: [],
+      totalQuantity: 0,
+      totalPrice: 0,
+      selectAll: false,
+    };
+  },
+  computed: {
+    selectedItems() {
+      return this.cartItems.filter((item) => item.selected);
+    },
+  },
   methods: {
-    filterText(value, query, item) {
-      return (
-        value != null &&
-        query != null &&
-        typeof value === "string" &&
-        value.toString().toLocaleUpperCase().indexOf(query) !== -1
+    async getProductsDetailFromApi() {
+      try {
+        this.productWanted.forEach(async (element) => {
+          const res = await axios.get(
+            "https://main.odour.site/product/" + element.product
+          );
+          const resProduct = res.data.body.product;
+          const product = {
+            name: resProduct.name,
+            price: resProduct.unitPrice,
+            quantity: element.quantity,
+            imageUrl: resProduct.medias[0].storageUrl,
+            selected: false,
+          };
+          this.cartItems.push(product);
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    getCartProductsFromCookies() {
+      const email = this.$cookies.get("e");
+      const productWantedKeys = this.$cookies
+        .keys()
+        .filter((key) => key.startsWith("cart" + email));
+      productWantedKeys.forEach((element) => {
+        this.productWanted.push(this.$cookies.get(element));
+      });
+    },
+    removeItem(index) {
+      this.cartItems.splice(index, 1);
+      this.calculateTotal(this.cartItems);
+    },
+    calculateTotal(items) {
+      this.totalQuantity = 0;
+      this.totalQuantity = items.reduce(
+        (total, item) => parseInt(total) + parseInt(item.quantity),
+        0
+      );
+      this.totalPrice = 0;
+      this.totalPrice = items.reduce(
+        (total, item) => total + item.quantity * parseInt(item.price),
+        0
       );
     },
+    calculateItemTotal(item) {
+      return (parseFloat(item.price) * item.quantity).toFixed(2);
+    },
+    toggleAll() {
+      this.selectAll = !this.selectAll;
+      this.cartItems.forEach((item) => (item.selected = this.selectAll));
+
+      this.calculateTotal(this.selectedItems);
+    },
+    updateSelection(items) {
+      if (items.length != this.cartItems.length) this.selectAll = false;
+      this.calculateTotal(items);
+    },
+    updateQuantity(item) {
+      if (!item.selected) return;
+      this.calculateTotal(this.cartItems);
+    },
+    checkout() {
+      if (this.selectedItems.length !== 0) {
+        localStorage.setItem("cart", JSON.stringify(this.selectedItems));
+        this.$router.push("/checkout");
+      }
+    },
+  },
+  mounted() {
+    this.getCartProductsFromCookies();
+    this.getProductsDetailFromApi();
   },
 };
 </script>
+
+<style scoped>
+.headline {
+  padding: 16px;
+}
+</style>

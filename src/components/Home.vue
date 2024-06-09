@@ -1,5 +1,11 @@
 <template>
-  <v-carousel height="auto" class="carousel">
+  <v-carousel
+    height="75vh"
+    class="carousel"
+    show-arrows="hover"
+    cycle
+    hide-delimiters
+  >
     <v-carousel-item
       v-for="(item, i) in carousel"
       :key="i"
@@ -7,7 +13,15 @@
       cover
     ></v-carousel-item>
   </v-carousel>
-
+  <!-- Sản phẩm moi -->
+  <v-row no-gutters>
+    <NewProduct></NewProduct>
+  </v-row>
+  <!-- Sản phẩm hot -->
+  <v-row no-gutters>
+    <HotTrend></HotTrend>
+  </v-row>
+  <!-- Danh mục các sản phẩm -->
   <v-container>
     <h2>Danh mục</h2>
     <v-row no-gutters>
@@ -17,15 +31,20 @@
         :item="cate"
         cols="12"
         sm="4"
-        class="float-left"
+        class="pa-6"
+        
       >
-        <v-sheet class="ma-2 pa-2" align="center" justify="center">
+        <v-sheet
+          class="pa-2"
+          align="center"
+          justify="center"
+          max-width="320"
+        >
           <v-img
-            min-width="163"
-            max-height="163"
+            min-width="auto"
+            max-height="363"
             :src="images[n]"
             class="category"
-            contain
             alt=""
           ></v-img>
           <v-col cols="12" class="text-center">
@@ -45,7 +64,13 @@
 </template>
 
 <script>
+import HotTrend from "./HomeHotTrend.vue";
+import NewProduct from "./HomeNewProduct.vue";
 export default {
+  components: {
+    HotTrend,
+    NewProduct,
+  },
   data() {
     return {
       categories: ["For Men", "For Ladies", "Gift Set"],
@@ -72,7 +97,6 @@ export default {
   },
 };
 </script>
-
 <style>
 .h0 {
   font-size: 50px;
