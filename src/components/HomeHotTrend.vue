@@ -19,7 +19,7 @@
           class="ma-4"
         >
           <v-responsive
-            class="ma-4 text-center"
+            class="ma-4 text-center cursor-pointer"
             color="grey-lighten-1"
             height="400"
             width="290"
@@ -53,7 +53,7 @@ import axios from "axios";
 export default {
   name: "HotTrend",
   data: () => ({
-    hotProducts: [1,2,3,4],
+    hotProducts: [1, 2, 3, 4],
     model: null,
     loading: true,
   }),

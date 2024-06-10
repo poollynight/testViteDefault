@@ -130,14 +130,42 @@
         </v-list>
       </v-dialog>
     </div>
+
+    <!-- Error dialog -->
+    <div class="pa-4 text-center">
+      <v-dialog
+        v-model="loadErrorDialog"
+        max-width="450"
+        max-height="400"
+        persistent
+      >
+        <v-list
+          class="py-2"
+          color="primary"
+          align="center"
+          elevation="12"
+          rounded="lg"
+        >
+          <v-list-item>
+            <p class="text-center pa-4 text-red">
+              <strong>{{ returnErrorMessage }}</strong>
+            </p>
+            <v-btn @click="loadErrorDialog = false" class="mb-1">Đóng</v-btn>
+          </v-list-item>
+        </v-list>
+      </v-dialog>
+    </div>
   </v-container>
 </template>
 
 <script>
 import axios from "axios";
+
 export default {
   data() {
     return {
+      errorMessages: "",
+      loadErrorDialog: false,
       loadDialog: false,
       loadSuccessDialog: false,
       name: "",
@@ -155,6 +183,11 @@ export default {
           "Mật khẩu phải đúng định dạng. VD: Ab123",
       ],
     };
+  },
+  computed: {
+    returnErrorMessage() {
+      return this.errorMessages;
+    },
   },
   methods: {
     async register() {
@@ -175,24 +208,30 @@ export default {
               // confirmPassword: this.confirmPassword,
             }
           );
-          console.log("Registration successful!", response.data);
           this.loadDialog = false;
           this.loadSuccessDialog = true;
         } catch (error) {
           if (error.response) {
-            // The request was made and the server responded with a status code
-            console.error("Error status:", error.response.status);
-            console.error("Error data:", error.response.data);
+            if (error.response.status == 409) {
+              this.loadDialog = false;
+              this.errorMessages = "Tài khoản đã tồn tại";
+              this.loadErrorDialog = true;
+            }
           } else if (error.request) {
             // The request was made but no response was received
+            this.errorMessages = "Lỗi kết nối server!";
+            this.loadErrorDialog = true;
             console.error("No response received from the server");
           } else {
             // Something happened in setting up the request that triggered an error
+            this.errorMessages = "Lỗi!";
+            this.loadErrorDialog = true;
             console.error("Error message:", error.message);
           }
         }
       } else {
-        console.error("Passwords do not match");
+        this.errorMessages = "Mật khẩu không trùng khớp!";
+        this.loadErrorDialog = true;
       }
     },
   },

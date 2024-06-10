@@ -1,69 +1,40 @@
 <template>
   <v-container class="min-height-500 pa-7">
     <div class="min-height-500">
-      <!-- <v-row no-gutters>
-        <v-col cols="3" sm="3">Sắp xếp:</v-col>
-        <v-col
-          class="cursor-pointer mb-5"
-          cols="3"
-          sm="2"
-          v-for="{ sortType, index } in sortTypes"
-          :key="index"
-          :item="sortType"
-          >gia dam dan</v-col
-        >
-      </v-row> -->
-      <v-row no-gutters>
-        <v-col cols="12" sm="12" xs="12">
-          <v-select :items="categories" item-title="title" label="Category">
-            <template v-slot:item="{ props }">
-              <v-list-item
-                v-bind="props"
-                @click="categorySelected(props.value)"
-              ></v-list-item>
-            </template>
-          </v-select>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col
-          v-for="item in products"
-          :key="item.Id"
-          :item="item"
-          cols="12"
-          sm="4"
-        >
-          <v-skeleton-loader :loading="loading" type="card">
-            <v-responsive
-              class="ma-2 pa-2 cursor-pointer"
-              align="center"
-              justify="center"
-              @click="onProductClick(item.id)"
+      <v-row justify="left">
+        <v-col cols="12" sm="5" lg="6">
+          <span class="subheading">Phân loại</span>
+          <v-chip-group selected-class="text-primary" mandatory>
+            <router-link
+              :to="{ path: '/shop', query: { categoryId: index } }"
+              v-for="(cate, index) in categories"
+              :key="index"
+              class="text-decoration-none text-black"
+              @click="selectedCategory = cate.title"
             >
-              <v-img
-                max-height="400px"
-                :src="item.medias[0].storageUrl"
-                cover
-              ></v-img>
-              <div class="product-text">
-                <p class="text-red-darken-2 text-h6 product-name">
-                  {{ item.name }}
-                </p>
-                <v-card-subtitle> {{ item.unitPrice }} VND</v-card-subtitle>
-                <v-card-subtitle> {{ item.productStatus }}</v-card-subtitle>
-              </div>
-            </v-responsive>
-          </v-skeleton-loader>
+              <v-chip :text="cate.title"></v-chip
+            ></router-link>
+          </v-chip-group>
+        </v-col>
+
+        <!-- sort -->
+        <v-col cols="12" sm="7" lg="6">
+          <span class="subheading">Sắp xếp</span>
+          <v-chip-group selected-class="text-primary" mandatory>
+            <router-link
+              :to="{ path: '/shop', query: { sortType: index } }"
+              v-for="(type, index) in sortTypes"
+              :key="index"
+              :ref="'sort' + index"
+              class="text-decoration-none text-black"
+              @click="selectedCategory = type.title"
+            >
+              <v-chip :text="type.title"></v-chip
+            ></router-link>
+          </v-chip-group>
         </v-col>
       </v-row>
-    </div>
-    <div class="text-center">
-      <v-pagination
-        v-model="currentPage"
-        :length="pageLength"
-        :total-visible="2"
-        @click="pageChanged"
-      ></v-pagination>
+      <router-view />
     </div>
   </v-container>
 </template>
@@ -72,10 +43,19 @@
 .min-height-500 {
   min-height: 50rem;
 }
+@media screen and (max-width: 812px) and (min-width: 715px) {
+  .product-name {
+    font-size: 0.8em !important;
+  }
+}
+@media screen and (max-width: 714px) and (min-width: 600px) {
+  .product-name {
+    font-size: 0.6em !important;
+  }
+}
 </style>
 
 <script>
-import axios from "axios";
 import testComp from "./testComp.vue";
 export default {
   components: {
@@ -83,10 +63,9 @@ export default {
   },
   data() {
     return {
+      selectedCategory: "All",
       products: [],
-      filterFlag: false,
       currentPage: 1,
-      itemsPerPage: 9,
       sortTypes: [
         {
           title: "Tên A-Z",
@@ -116,54 +95,36 @@ export default {
       pageLength: 0,
       loading: true,
       showMenu: false,
+      loadProductCondition: {
+        sortType: "prod:name:desc",
+        cate: 0,
+      },
     };
   },
-  // watch: {
-  //   // getProductDetail
-  //   currentPage() {
-  //     this.getProductsData(this.currentPage);
-  //   },
-  // },
   methods: {
-    pageChanged() {
-      this.getProductsData(this.currentPage);
-    },
-    onProductClick(itemId) {
-      this.$router.push("/product/" + itemId);
-    },
-    // fetch get product api
-    async getProductsData(page) {
-      const sortId = this.$route.query.sortType;
-      const cateId = this.$route.query.categoryId;
-      this.currentPage = this.$route.query.currentPage;
-      var sortType = this.sortTypes[0].value;
-      var categoryId = this.categories[0].value;
-      if (page != null) this.currentPage = page;
-      else if (this.currentPage == null) this.currentPage = 1;
-      if (sortId != null) sortType = this.sortTypes[sortId].value;
-      if (cateId != null) categoryId = this.categories[cateId].value;
-      try {
-        const response = await axios.get(
-          `https://main.odour.site/product?currentPage=${this.currentPage}&sortType=${sortType}&categoryId=${categoryId}`
-        );
-        this.products = response.data.body.products; // Assuming the response is an array of items
-        this.pageLength = response.data.body.numberOfPage;
-        this.loading = false;
-        console.log(this.products);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+    filterByCategory() {
+      this.loadProductCondition.cate = this.categories.find(
+        (e) => e.value == this.selectedCategory
+      );
+
+      console.log(this.loadProductCondition.cate.title);
     },
 
-    categorySelected(cateId) {
-      // const cate = this.categories.find(
-      //   (category) => category.title === cateId
-      // );
-      // this.$router.push(`/shop?categoryId=${cate}`);
+    categorySelected(categoryValue) {
+      console.log(categoryValue); // Giá trị của category được chọn
     },
   },
+  beforeRouteLeave(to, from, next) {
+    // Kiểm tra nếu route hiện tại là route trước đó
+    if (from.name === this.$route.name) {
+      // Nếu là trang trước đó, gọi hàm xử lý
+      console.log("beforeRouteLeave");
+    }
+    // Tiếp tục với việc chuyển route
+    next();
+  },
   mounted() {
-    this.getProductsData();
+    // this.$refs.sort0.$el.click();
   },
 };
 </script>

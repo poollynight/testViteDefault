@@ -19,7 +19,7 @@
           class="ma-4"
         >
           <v-responsive
-            class="ma-4 text-center"
+            class="ma-4 text-center cursor-pointer"
             color="grey-lighten-1"
             height="400"
             width="290"

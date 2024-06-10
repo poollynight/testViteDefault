@@ -104,7 +104,7 @@ export default {
       navigatorLg: [
         {
           title: "Mua sắm",
-          value: "/shop",
+          value: "/shop?categoryId=0",
         },
         {
           title: "Giới thiệu",

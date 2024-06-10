@@ -17,7 +17,11 @@
     </v-dialog>
   </div>
   <v-container>
-    <v-skeleton-loader :loading="loading" type="card">
+    <v-skeleton-loader
+      :loading="loading"
+      type="card-avatar, article"
+      height="800"
+    >
       <v-row no-gutters>
         <v-col cols="12" sm="5" align="center">
           <v-responsive
@@ -130,8 +134,8 @@
       show-arrows
     >
       <v-slide-group-item
-        v-for="(item, index) in relatedProducts"
-        :key="index"
+        v-for="item in relatedProducts"
+        :key="item.id"
         :item="item"
       >
         <v-skeleton-loader
@@ -178,15 +182,6 @@
 .ProName {
   font-size: xx-large;
 }
-.quantityInput {
-  height: 2em;
-}
-.centered-text-field input {
-  text-align: center;
-}
-.no-background-text-field .v-input__slot {
-  background-color: transparent !important;
-}
 </style>
 
 <script>
@@ -207,13 +202,8 @@ export default {
     billNumber: 1,
     relatedProducts: [1, 2, 3],
   }),
-  watch: {
-    // getProductDetail
-  },
+
   methods: {
-    productImageSrc(id) {
-      return `/src/assets/${id}.jpg`;
-    },
     increaseQuantity() {
       this.quantity += 1;
     },
@@ -235,8 +225,8 @@ export default {
       this.$cookies.set("cart" + email + billNumber, jsonBill, "30d", "/");
     },
     async getProductDetail() {
-      const itemId = this.$route.params.id;
-      console.log(itemId);
+      this.loading = true;
+      var itemId = this.$route.params.id;
       try {
         const response = await axios.get(
           `https://main.odour.site/product/${itemId}`
@@ -248,15 +238,15 @@ export default {
         this.tangHuongDau = description.TANG_HUONG.HUONG_DAU;
         this.tangHuongGiua = description.TANG_HUONG.HUONG_GIUA;
         this.tangHuongCuoi = description.TANG_HUONG.HUONG_CUOI;
-        this.loading = false;
-        console.log(this.product);
+        setTimeout(() => (this.loading = false), 100);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     },
     async getRelatedProducts() {
+      this.relatedLoading = true;
       try {
-        const res = await axios.get(
+        var res = await axios.get(
           "https://main.odour.site/product/related/" + this.product.category.id
         );
         this.relatedProducts = res.data.body.products;
@@ -269,6 +259,12 @@ export default {
     onProductClick(itemId) {
       this.$router.push("/product/" + itemId);
       this.getProductDetail();
+    },
+  },
+  watch: {
+    $route(to, from) {
+      // Kiểm tra xem route có thay đổi không
+      if (to.params !== from.params) this.getProductDetail();
     },
   },
   mounted() {

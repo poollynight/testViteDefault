@@ -5,8 +5,9 @@
       <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer">
         <v-icon>mdi-format-list-bulleted</v-icon></v-app-bar-nav-icon
       >
-
-      <v-toolbar-title>Odour</v-toolbar-title>
+      <router-link to="/" class="text-decoration-none text-white">
+        <v-toolbar-title>Odour</v-toolbar-title></router-link
+      >
       <v-spacer></v-spacer>
     </v-app-bar>
 
@@ -68,7 +69,7 @@ export default {
         },
         {
           title: "Mua sắm",
-          value: "/shop",
+          value: "/shop?categoryId=0",
         },
         {
           title: "Giới thiệu",
