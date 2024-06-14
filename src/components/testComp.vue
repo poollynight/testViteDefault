@@ -21,18 +21,19 @@
           <v-responsive
             class="ma-4 text-center cursor-pointer phone-loader"
             color="grey-lighten-1"
-            max-height="400"
-            width="300"
+            max-height="550"
+            width="20vw"
             @click="
               onProductClick(item.id);
               toggle;
             "
           >
             <v-img
+              width="100%"
               src="https://res.cloudinary.com/dsyysapur/image/upload/v1717643040/ODOUR_EXE/SYSTEM/cate-men_lmimzr.webp"
               cover
             ></v-img>
-            <div class="product-text">
+            <div class="home-product-text">
               <p class="text-black">{{ 123123123123123 }}</p>
               <p class="text-red">{{ 123123 }} VND</p>
               <p class="text-black">
@@ -74,15 +75,37 @@ export default {
 };
 </script>
 <style>
-.product-text {
+.home-product-text {
   font-size: x-large;
 }
-@media screen and (max-width: 721px) {
-  .product-text {
+@media screen and (max-width: 425px) {
+  .home-product-text {
     font-size: small;
   }
-  .product-text p:first-child{
-    height: 8vh;
+  .home-product-text p:first-child {
+    height: 35px !important;
+  }
+  .phone-loader {
+    width: 45vw !important;
+    max-height: 70vh;
   }
 }
+@media screen and (max-width: 599px) and (min-width: 426px) {
+  .home-product-text {
+    font-size: small;
+  }
+  .home-product-text p:first-child {
+    height: 35px !important;
+  }
+  .phone-loader {
+    width: 35vw !important;
+    max-height: 70vh;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .home-product-text {
+    font-size: medium;
+  }
+}
+
 </style>

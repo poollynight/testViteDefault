@@ -72,7 +72,7 @@ export default {
   components: {
     HotTrend,
     NewProduct,
-    test,
+    test
   },
   data() {
     return {
@@ -127,12 +127,12 @@ export default {
 }
 @media screen and (max-width: 399px) {
   .phone-sheet {
-    max-height: 76vh;
+    max-height: 43vh;
   }
 }
 @media screen and (max-width: 599px) and (min-width: 400px) {
   .phone-sheet {
-    height: 83vh;
+    height: 50vh;
   }
 }
 @media screen and (max-width: 1279px) and (min-width: 600px) {

@@ -21,14 +21,14 @@
           <v-responsive
             class="ma-4 text-center cursor-pointer phone-loader"
             color="grey-lighten-1"
-            max-height="400"
-            width="290"
+            max-height="550"
+            width="20vw"
             @click="
               onProductClick(item.id);
               toggle;
             "
           >
-            <v-img :src="item.medias[0].storageUrl" cover></v-img>
+            <v-img :src="item.medias[0].storageUrl" width="100%" cover></v-img>
             <div class="home-product-text">
               <p class="text-h5 text-black">{{ item.name }}</p>
               <p class="text-red text-h6">{{ item.unitPrice }} VND</p>
@@ -71,15 +71,36 @@ export default {
 };
 </script>
 <style>
-.product-text {
+.home-product-text {
   font-size: x-large;
 }
-@media screen and (max-width: 471px) {
+@media screen and (max-width: 425px) {
   .home-product-text {
     font-size: small;
   }
   .home-product-text p:first-child {
-    height: 8vh;
+    height: 35px !important;
+  }
+  .phone-loader {
+    width: 45vw !important;
+    max-height: 70vh;
+  }
+}
+@media screen and (max-width: 599px) and (min-width: 426px) {
+  .home-product-text {
+    font-size: small;
+  }
+  .home-product-text p:first-child {
+    height: 35px !important;
+  }
+  .phone-loader {
+    width: 35vw !important;
+    max-height: 70vh;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .home-product-text {
+    font-size: medium;
   }
 }
 </style>
