@@ -94,8 +94,13 @@ export default {
     height: 40px !important;
   }
   .phone-loader {
-    width: 35vw !important;
-    max-height: 70vw;
+    width: 40vw !important;
+    max-height: 70vh;
+  }
+}
+@media screen and (max-width: 794px) and (min-width: 600px) {
+  .home-product-text {
+    font-size: medium;
   }
 }
 @media screen and (max-width: 1192px) {
