@@ -33,7 +33,13 @@
         sm="4"
         class="pa-6"
       >
-        <v-sheet class="pa-2" align="center" justify="center" height="350" max-width="320">
+        <v-sheet
+          class="pa-2"
+          align="center"
+          justify="center"
+          height="350"
+          max-width="320"
+        >
           <v-img
             min-width="auto"
             max-height="363"
@@ -41,11 +47,11 @@
             class="category"
             alt=""
           ></v-img>
-          <v-col cols="12" class="text-center pa-4" >
+          <v-col cols="12" class="text-center pa-4">
             <span class="text-h5">{{ cate }}</span>
           </v-col>
           <v-btn
-            @click="$router.push('/shop?categoryId=' + (n+1))"
+            @click="$router.push('/shop?categoryId=' + (n + 1))"
             class="responsive-btn"
             color="red"
           >
@@ -94,9 +100,8 @@ export default {
   methods: {
     async getHomeProducts() {
       try {
-        const res = await axios.get("https://main.odour.site/product/home");
+        const res = await axios.get("https://main.odour.site/product/home", {});
         this.hotProducts = res.data.body.newProducts;
-        console.log(this.hotProducts);
       } catch (error) {
         console.log(error);
       }

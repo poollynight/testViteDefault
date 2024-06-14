@@ -24,18 +24,17 @@
           <!-- end list navbar -->
         </v-list-item>
 
+        <!-- quan li gio hang -->
+        <router-link to="/user/cart" class="text-decoration-none text-black">
+          Giỏ hàng
+        </router-link>
         <v-list-item v-if="isLogin == false">
           <!-- quan li tai khoan -->
           <router-link to="/login" class="text-decoration-none text-black">
             Đăng nhập
           </router-link>
         </v-list-item>
-        <v-list-item v-if="isLogin">
-          <!-- quan li gio hang -->
-          <router-link to="/user/cart" class="text-decoration-none text-black">
-            Giỏ hàng
-          </router-link>
-        </v-list-item>
+        <v-list-item v-if="isLogin"> </v-list-item>
         <v-list-item v-for="(item, index) in selfManage" :key="index">
           <router-link
             :to="'/' + item.value"

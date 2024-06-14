@@ -82,6 +82,7 @@ export default {
         localStorage.setItem("avatar", response.data.body.user.avatarUrl);
         $cookies.set("ato", response.data.body.accessToken, "30d", "/");
         $cookies.set("e", response.data.body.user.email, "30d", "/");
+        $cookies.set("rt", response.data.body.refreshToken, "30d", "/");
         $cookies.set(
           "confe",
           response.data.body.user.emailConfirmed,

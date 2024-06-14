@@ -69,11 +69,11 @@ export default {
       sortTypes: [
         {
           title: "Tên A-Z",
-          value: "prod:name:desc",
+          value: "prod:name:asc",
         },
         {
           title: "Tên Z-A",
-          value: "prod:name:asc",
+          value: "prod:name:desc",
         },
         { title: "Giá giảm dần", value: "prod:price:desc" },
         { title: "Giá tăng dần", value: "prod:price:asc" },
@@ -101,30 +101,14 @@ export default {
       },
     };
   },
-  methods: {
-    filterByCategory() {
-      this.loadProductCondition.cate = this.categories.find(
-        (e) => e.value == this.selectedCategory
-      );
-
-      console.log(this.loadProductCondition.cate.title);
-    },
-
-    categorySelected(categoryValue) {
-      console.log(categoryValue); // Giá trị của category được chọn
-    },
-  },
   beforeRouteLeave(to, from, next) {
     // Kiểm tra nếu route hiện tại là route trước đó
     if (from.name === this.$route.name) {
       // Nếu là trang trước đó, gọi hàm xử lý
-      console.log("beforeRouteLeave");
+      // console.log("beforeRouteLeave");
     }
     // Tiếp tục với việc chuyển route
     next();
-  },
-  mounted() {
-    // this.$refs.sort0.$el.click();
   },
 };
 </script>

@@ -22,7 +22,6 @@ const routes = [
     {
         path: '/user/cart',
         component: Cart,
-        meta: { requiresAuth: true } 
     },
     {
         path: '/checkout',

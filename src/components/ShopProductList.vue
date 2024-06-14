@@ -156,10 +156,6 @@ export default {
         console.error("Error fetching data:", error);
       }
     },
-
-    categorySelected(categoryValue) {
-      console.log(categoryValue); // Giá trị của category được chọn
-    },
   },
   mounted() {
     if (localStorage.getItem("cate") === null) localStorage.setItem("cate", 0);

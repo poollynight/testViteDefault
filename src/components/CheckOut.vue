@@ -9,7 +9,7 @@
     ></v-alert>
     <v-row class="mt-5">
       <!-- Column for Product Information -->
-      <v-col cols="12" sm="5">
+      <v-col cols="12" sm="6">
         <v-card class="elevation-2">
           <v-card-title class="headline">Thông tin đơn hàng</v-card-title>
           <v-divider></v-divider>
@@ -18,26 +18,26 @@
               <template v-slot:default>
                 <thead>
                   <tr>
-                    <th class="text-center">Product</th>
-                    <th class="text-center">Quantity</th>
-                    <th class="text-center">Price</th>
-                    <th class="text-center">Total</th>
+                    <th class="text-center">Sản phẩm</th>
+                    <th class="text-center">Số lượng</th>
+                    <th class="text-center">Đơn giá (VND)</th>
+                    <th class="text-center">Thành tiền</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(item, index) in cartItems" :key="index">
                     <td class="text-center">{{ item.name }}</td>
                     <td class="text-center">{{ item.quantity }}</td>
-                    <td class="text-center">{{ item.price }}</td>
+                    <td class="text-center">{{ item.unitPrice }}</td>
                     <td class="text-center">
-                      {{ calculateItemTotal(item) }} VND
+                      {{ item.totalPrice }}
                     </td>
                   </tr>
                   <tr>
                     <td></td>
                     <td></td>
                     <td>Tổng cộng:</td>
-                    <td>{{ calculateTotal }} VND</td>
+                    <td>{{ calculateTotal }}</td>
                   </tr>
                 </tbody>
               </template>
@@ -47,7 +47,7 @@
       </v-col>
 
       <!-- Column for Checkout Form -->
-      <v-col cols="12" sm="7">
+      <v-col cols="12" sm="6">
         <v-card class="elevation-2">
           <v-card-title class="headline">Địa chỉ nhận hàng</v-card-title>
           <v-divider></v-divider>
@@ -81,7 +81,7 @@
                 v-model="customer.address"
                 label="Địa chỉ"
               ></v-text-field>
-              <v-btn color="primary" @click="submitOrder" type="submit"
+              <v-btn color="red-darken-4" @click="submitOrder" type="submit"
                 >Đặt hàng</v-btn
               >
             </v-form>
@@ -97,11 +97,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      cartItems: [
-        { name: "Product 1", quantity: 2, price: 10 },
-        { name: "Product 2", quantity: 1, price: 15 },
-        { name: "Product 3", quantity: 3, price: 20 },
-      ],
+      cartItems: [{ name: "Product 1", quantity: 2, price: 10 }],
       customer: {
         name: "",
         phone: "",
@@ -144,7 +140,7 @@ export default {
     calculateTotal() {
       this.totalPrice = 0;
       this.cartItems.forEach((item) => {
-        this.totalPrice += item.quantity * item.price;
+        this.totalPrice += item.totalPrice;
       });
       return this.totalPrice;
     },
@@ -161,9 +157,6 @@ export default {
   methods: {
     loadBill() {
       this.cartItems = JSON.parse(localStorage.getItem("cart"));
-    },
-    calculateItemTotal(item) {
-      return item.quantity * item.price;
     },
     submitOrder() {
       for (let key in this.customer) {

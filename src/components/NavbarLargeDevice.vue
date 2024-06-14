@@ -63,9 +63,9 @@
           >
             <p></p>
             <router-link
+              v-if="!($route.path === '/login')"
               to="/user/cart"
               class="text-decoration-none text-black"
-              v-if="isLogin"
             >
               <v-icon class="text-h5">mdi-cart</v-icon>
             </router-link>

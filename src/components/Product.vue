@@ -212,17 +212,43 @@ export default {
       if (this.quantity < 1) this.quantity = 1;
     },
 
-    addToCart() {
-      var email = this.$cookies.get("e");
+    async addToCart() {
       const bill = {
-        email: email,
         product: this.product.id,
         quantity: this.quantity,
       };
-      const billNumber =
-        this.$cookies.keys().filter((key) => key.startsWith("cart")).length + 1;
-      const jsonBill = JSON.stringify(bill);
-      this.$cookies.set("cart" + email + billNumber, jsonBill, "30d", "/");
+      if (this.$cookies.get("ato") == null) {
+        try {
+          const response = await axios.post(
+            "https://main.odour.site/guest/cart/add",
+            {
+              productId: this.product.id,
+              quantity: this.quantity,
+            }
+          );
+          console.log(response);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        try {
+          const response = await axios.post(
+            "https://main.odour.site/user/cart/add",
+            {
+              productId: this.product.id,
+              quantity: this.quantity,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${this.$cookies.get("ato")}`,
+              },
+            }
+          );
+          console.log("Success" + response);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     },
     async getProductDetail() {
       this.loading = true;
@@ -238,7 +264,7 @@ export default {
         this.tangHuongDau = description.TANG_HUONG.HUONG_DAU;
         this.tangHuongGiua = description.TANG_HUONG.HUONG_GIUA;
         this.tangHuongCuoi = description.TANG_HUONG.HUONG_CUOI;
-        setTimeout(() => (this.loading = false), 100);
+        setTimeout(() => (this.loading = false), 250);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -251,7 +277,6 @@ export default {
         );
         this.relatedProducts = res.data.body.products;
         this.relatedLoading = false;
-        console.log(this.relatedProducts);
       } catch (error) {
         console.log(error);
       }
