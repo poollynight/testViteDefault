@@ -21,26 +21,20 @@
           <v-responsive
             class="ma-4 text-center cursor-pointer phone-loader"
             color="grey-lighten-1"
-            height="400"
-            max-width="290"
+            max-height="400"
+            width="290"
             @click="
               onProductClick(item.id);
               toggle;
             "
           >
-            <v-img
-              max-height="300px"
-              :src="item.medias[0].storageUrl"
-              cover
-            ></v-img>
+            <v-img :src="item.medias[0].storageUrl" cover></v-img>
             <div class="product-text">
-              <p class="text-h5 product-name text-black">{{ item.name }}</p>
-              <v-card-subtitle class="text-red text-h6">
-                {{ item.unitPrice }} VND</v-card-subtitle
-              >
-              <v-card-subtitle class="text-black text-h8">
-                {{ item.productStatus }}</v-card-subtitle
-              >
+              <p class="text-h5 text-black">{{ item.name }}</p>
+              <p class="text-red text-h6">{{ item.unitPrice }} VND</p>
+              <p class="text-black text-h8">
+                {{ item.productStatus }}
+              </p>
             </div>
           </v-responsive>
         </v-skeleton-loader>
@@ -77,9 +71,15 @@ export default {
 };
 </script>
 <style>
+.product-text {
+  font-size: x-large;
+}
 @media screen and (max-width: 471px) {
-  .phone-loader {
-    width: 15em !important;
+  .product-text {
+    font-size: small;
+  }
+  .product-text p:first-child {
+    height: 8vh;
   }
 }
 </style>

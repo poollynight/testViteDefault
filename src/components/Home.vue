@@ -33,8 +33,8 @@
         sm="4"
         class="pa-6 phone-sheet"
       >
-        <v-sheet
-          class="pa-2 "
+        <v-responsive
+          class="pa-2 bg-white"
           align="center"
           justify="center"
           height="350"
@@ -57,7 +57,7 @@
           >
             <p>Go Shop</p>
           </v-btn>
-        </v-sheet>
+        </v-responsive>
       </v-col>
     </v-row>
   </v-container>
@@ -66,11 +66,13 @@
 <script>
 import HotTrend from "./HomeHotTrend.vue";
 import NewProduct from "./HomeNewProduct.vue";
+import test from "./testComp.vue";
 import axios from "axios";
 export default {
   components: {
     HotTrend,
     NewProduct,
+    test,
   },
   data() {
     return {
@@ -123,20 +125,19 @@ export default {
   min-height: 140px;
   max-height: 200px;
 }
-
-@media screen and (max-width: 1280px){
+@media screen and (max-width: 399px) {
+  .phone-sheet {
+    max-height: 76vh;
+  }
+}
+@media screen and (max-width: 599px) and (min-width: 400px) {
+  .phone-sheet {
+    height: 83vh;
+  }
+}
+@media screen and (max-width: 1279px) and (min-width: 600px) {
   .phone-sheet {
     max-height: 70vh;
-  }
-}
-@media screen and (max-width: 849px){
-  .phone-sheet {
-    max-height: 55vh;
-  }
-}
-@media screen and (max-width: 599px) {
-  .phone-sheet {
-    height: 55vh;
   }
 }
 </style>

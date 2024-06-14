@@ -1,78 +1,88 @@
 <template>
   <v-container>
-    <v-row justify="center">
-      <v-col cols="12" sm="10" md="8">
-        <v-card class="elevation-2">
-          <v-card-title class="headline">User Profile</v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  label="Name"
-                  v-model="user.name"
-                  outlined
-                  readonly
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  label="Email"
-                  v-model="user.email"
-                  outlined
-                  readonly
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  label="Age"
-                  v-model="user.age"
-                  outlined
-                  readonly
-                ></v-text-field>
-              </v-col>
-              <!-- Add more profile information fields here -->
-            </v-row>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" @click="editProfile">Edit Profile</v-btn>
-            <v-btn color="error" @click="logout">Logout</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+    <h2>Sản phẩm mới</h2>
+    <v-slide-group
+      v-model="model"
+      class="pt-4"
+      selected-class="bg-success"
+      show-arrows
+    >
+      <v-slide-group-item
+        v-for="(item, index) in newProducts"
+        :key="index"
+        :item="item"
+      >
+        <v-skeleton-loader
+          :loading="loading"
+          type="card"
+          width="300"
+          class="ma-4"
+        >
+          <v-responsive
+            class="ma-4 text-center cursor-pointer phone-loader"
+            color="grey-lighten-1"
+            max-height="400"
+            width="300"
+            @click="
+              onProductClick(item.id);
+              toggle;
+            "
+          >
+            <v-img
+              src="https://res.cloudinary.com/dsyysapur/image/upload/v1717643040/ODOUR_EXE/SYSTEM/cate-men_lmimzr.webp"
+              cover
+            ></v-img>
+            <div class="product-text">
+              <p class="text-black">{{ 123123123123123 }}</p>
+              <p class="text-red">{{ 123123 }} VND</p>
+              <p class="text-black">
+                {{ 123123123 }}
+              </p>
+            </div>
+          </v-responsive>
+        </v-skeleton-loader>
+      </v-slide-group-item>
+    </v-slide-group>
   </v-container>
 </template>
-
 <script>
+import axios from "axios";
 export default {
-  data() {
-    return {
-      user: {
-        name: "John Doe",
-        email: "john@example.com",
-        age: 30,
-        // Add more profile information here
-      },
-    };
-  },
+  name: "HotTrend",
+  data: () => ({
+    newProducts: [1, 1, 1, 1],
+    model: null,
+    loading: false,
+  }),
   methods: {
-    editProfile() {
-      // Navigate to the edit profile page
-      this.$router.push("/edit-profile");
+    // async getHomeProducts() {
+    //   try {
+    //     const res = await axios.get("https://main.odour.site/product/home");
+    //     this.newProducts = res.data.body.newProducts;
+    //     this.loading = false;
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+    onProductClick(itemId) {
+      this.$router.push("/product/" + itemId);
     },
-    logout() {
-      // Implement logout logic, such as clearing authentication tokens or cookies
-      // Then navigate to the login page
-      this.$router.push("/login");
-    },
+  },
+  mounted() {
+    // this.getHomeProducts();
   },
 };
 </script>
-
-<style scoped>
-.card {
-  margin-top: 20px;
+<style>
+.product-text {
+  font-size: x-large;
+}
+@media screen and (max-width: 721px) {
+  .product-text {
+    font-size: small;
+  }
+  .product-text p:first-child{
+    height: 8vh;
+  }
 }
 </style>
