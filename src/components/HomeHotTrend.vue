@@ -79,14 +79,14 @@ export default {
     font-size: small;
   }
   .home-product-text p:first-child {
-    height: 35px !important;
+    height: 40px !important;
   }
   .phone-loader {
     width: 45vw !important;
-    max-height: 70vh;
+    max-height: 70vw;
   }
 }
-@media screen and (max-width: 690px) and (min-width: 426px) {
+@media screen and (max-width: 599px) and (min-width: 426px) {
   .home-product-text {
     font-size: small;
   }
@@ -95,12 +95,7 @@ export default {
   }
   .phone-loader {
     width: 35vw !important;
-    max-height: 70vh;
-  }
-}
-@media screen and (max-width: 794px) and (min-width: 690px) {
-  .home-product-text {
-    font-size: medium;
+    max-height: 70vw;
   }
 }
 @media screen and (max-width: 1192px) {

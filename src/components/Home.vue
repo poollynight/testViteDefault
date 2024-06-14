@@ -135,7 +135,7 @@ export default {
 }
 @media screen and (max-width: 399px) and (min-width: 351px) {
   .phone-sheet {
-    max-height: 60vh;
+    max-height: 95vw;
   }
   .carousel {
     height: 30vh !important;
@@ -143,7 +143,7 @@ export default {
 }
 @media screen and (max-width: 599px) and (min-width: 400px) {
   .phone-sheet {
-    max-height: 70vh;
+    max-height: 95vw;
   }
   .carousel {
     height: 30vh !important;
@@ -151,7 +151,7 @@ export default {
 }
 @media screen and (max-width: 1279px) and (min-width: 600px) {
   .phone-sheet {
-    max-height: 70vh;
+    max-height: 70vw;
   }
 }
 </style>
