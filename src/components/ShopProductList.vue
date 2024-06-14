@@ -116,6 +116,8 @@ export default {
         this.getProductsData();
       } else if (to.query.sortType !== undefined) {
         this.getProductsData();
+      } else if (from.path === "/home") {
+        localStorage.setItem("cate", this.$route.query.categoryId);
       }
     },
   },
