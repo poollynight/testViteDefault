@@ -65,7 +65,7 @@
               <p class="ProName">{{ product.name }}</p>
               <p>Dành cho: {{ product.category.name }}</p>
             </div>
-            <v-sheet height="4rem" width="100%" class="bg-grey-lighten-4 d-flex">
+            <v-sheet height="4rem" width="100%" class="bg-grey-lighten-4 d-flex price">
               <p class="ProName mt-3 pl-5 text-red-darken-2">
                 {{ product.unitPrice }} VND
               </p>
@@ -74,16 +74,16 @@
               <p class="text-h6">Nhóm hương:</p>
               <p>{{ nhomHuong }}</p>
             </div>
-            <div>
+            <v-responsive width="75vw">
               <p class="text-h6">Tầng hương:</p>
-              <p>
+              <p width="auto">
                 Tầng đầu: {{ tangHuongDau }}
                 <br />
                 Tầng giữa: {{ tangHuongGiua }}
                 <br />
                 Tầng cuối: {{ tangHuongCuoi }}
               </p>
-            </div>
+            </v-responsive>
             <div>
               <p class="text-h6">Độ lưu hương:</p>
               <p>
@@ -181,6 +181,11 @@
 }
 .ProName {
   font-size: x-large;
+}
+@media screen and (max-width: 400px) {
+  .price {
+    width: 75vw;
+  }
 }
 </style>
 
