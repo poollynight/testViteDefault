@@ -22,7 +22,7 @@
             class="ma-4 text-center cursor-pointer phone-loader"
             color="grey-lighten-1"
             height="400"
-            width="100%"
+            max-width="290"
             @click="
               onProductClick(item.id);
               toggle;

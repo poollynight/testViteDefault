@@ -31,10 +31,10 @@
         :item="cate"
         cols="12"
         sm="4"
-        class="pa-6"
+        class="pa-6 phone-sheet"
       >
         <v-sheet
-          class="pa-2 phone-sheet"
+          class="pa-2 "
           align="center"
           justify="center"
           height="350"
