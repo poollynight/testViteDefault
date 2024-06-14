@@ -252,7 +252,27 @@ export default {
           console.log("Success" + response);
         } catch (error) {
           console.log(error);
+          this.refreshToken();
         }
+      }
+    },
+    async refreshToken() {
+      try {
+        const response = await axios.post(
+          "https://main.odour.site/auth/refreshAccessToken",
+          {
+            refreshToken: this.$cookies.get("rt"),
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.$cookies.get("ato")}`,
+            },
+          }
+        );
+        this.$cookies.set("ato", response.data.body.newAccessToken);
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
       }
     },
     async getProductDetail() {

@@ -150,11 +150,10 @@ export default {
             "https://main.odour.site/guest/cart/remove",
             {
               productId: item.id,
-              quantity: item.quantity,
+              quantity: --item.quantity,
             }
           );
           this.cartItems = res.data.body.orderItems;
-          console.log(res);
         } catch (err) {
           console.log(err);
         }
@@ -164,7 +163,7 @@ export default {
             "https://main.odour.site/user/cart/remove",
             {
               productId: item.id,
-              quantity: item.quantity,
+              quantity: --item.quantity,
             },
             {
               headers: {
@@ -249,7 +248,7 @@ export default {
             "https://main.odour.site/guest/cart/add",
             {
               productId: item.id,
-              quantity: item.quantity,
+              quantity: ++item.quantity,
             }
           );
           this.cartItems = res.data.body.orderItems;
