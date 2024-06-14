@@ -65,7 +65,11 @@
               <p class="ProName">{{ product.name }}</p>
               <p>Dành cho: {{ product.category.name }}</p>
             </div>
-            <v-sheet height="4rem" width="100%" class="bg-grey-lighten-4 d-flex price">
+            <v-sheet
+              height="4rem"
+              width="100%"
+              class="bg-grey-lighten-4 d-flex price"
+            >
               <p class="ProName mt-3 pl-5 text-red-darken-2">
                 {{ product.unitPrice }} VND
               </p>
@@ -95,7 +99,7 @@
             <div>
               <p class="text-h5 mb-7">Số lượng</p>
               <v-row>
-                <v-col class="d-flex" cols="12">
+                <v-col class="d-flex" cols="12" sm="12">
                   <v-btn
                     class="bg-red-darken-4 mr-5"
                     @click="decreaseQuantity()"
@@ -109,16 +113,22 @@
                   >
                     +
                   </v-btn>
-                  <p>{{ product.quantityInStock }} sản phẩm có sẵn</p>
+                  <v-col cols="12" sm="12"
+                    ><p>{{ product.quantityInStock }} sản phẩm có sẵn</p></v-col
+                  >
                 </v-col>
               </v-row>
             </div>
-            <div class="d-flex flex-row pb-4">
-              <v-btn class="bg-red-darken-4 mr-6 w-25">Mua ngay</v-btn>
-              <v-btn class="bg-red-darken-4" @click="addToCart"
-                >Thêm vào giỏ hàng</v-btn
-              >
-            </div>
+            <v-row class="d-flex flex-row pb-4">
+              <v-col cols="12" sm="5">
+                <v-btn class="bg-red-darken-4 mr-6 w-25">Mua ngay</v-btn>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-btn class="bg-red-darken-4" @click="addToCart"
+                  >Thêm vào giỏ hàng</v-btn
+                >
+              </v-col>
+            </v-row>
           </v-responsive>
         </v-col>
       </v-row>
