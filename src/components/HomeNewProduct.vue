@@ -16,13 +16,13 @@
           :loading="loading"
           type="card"
           width="300"
-          class="ma-4 phone-loader"
+          class="ma-4 "
         >
           <v-responsive
-            class="ma-4 text-center cursor-pointer"
+            class="ma-4 text-center cursor-pointer phone-loader"
             color="grey-lighten-1"
             height="400"
-            width="290"
+            width="100%"
             @click="
               onProductClick(item.id);
               toggle;
@@ -79,7 +79,8 @@ export default {
 <style>
 @media screen and (max-width: 471px) {
   .phone-loader {
-    width: 11em !important;
+    max-width: 17vw !important;
+    max-height: 30vh;
   }
 }
 </style>

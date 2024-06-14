@@ -123,14 +123,15 @@ export default {
   min-height: 140px;
   max-height: 200px;
 }
-@media screen and (max-width: 1280px) and (min-width: 850px) {
+
+@media screen and (max-width: 1280px){
   .phone-sheet {
-    max-height: 50vh;
+    max-height: 70vh;
   }
 }
-@media screen and (max-width: 849px) and (min-width: 500px) {
+@media screen and (max-width: 849px){
   .phone-sheet {
-    max-height: 50vh;
+    max-height: 55vh;
   }
 }
 @media screen and (max-width: 599px) {
