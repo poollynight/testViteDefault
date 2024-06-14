@@ -113,14 +113,14 @@
                   >
                     +
                   </v-btn>
-                  <v-col cols="12" sm="12"
+                  <v-col cols="12" sm="6"
                     ><p>{{ product.quantityInStock }} sản phẩm có sẵn</p></v-col
                   >
                 </v-col>
               </v-row>
             </div>
             <v-row class="d-flex flex-row pb-4">
-              <v-col cols="12" sm="5">
+              <v-col cols="12" sm="6">
                 <v-btn class="bg-red-darken-4 mr-6 w-25">Mua ngay</v-btn>
               </v-col>
               <v-col cols="12" sm="6">
