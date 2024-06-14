@@ -32,6 +32,7 @@
             <v-img
               style="cursor: pointer"
               height="auto"
+              width="300"
               cover
               :src="product.medias[0].storageUrl"
               @click="zoomImage = !zoomImage"
@@ -42,7 +43,7 @@
               center-active
               show-arrows
             >
-              <v-slide-group-item v-for="n in 3" :key="n" v-slot="{ toggle }">
+              <v-slide-group-item v-for="n in 1" :key="n" v-slot="{ toggle }">
                 <v-card class="ma-4" height="100" width="100" @click="toggle">
                   <v-img
                     height="200"
@@ -65,15 +66,10 @@
               <p class="ProName">{{ product.name }}</p>
               <p>Dành cho: {{ product.category.name }}</p>
             </div>
-            <v-sheet
-              height="4rem"
-              width="100%"
-              class="bg-grey-lighten-4 d-flex price"
-            >
-              <p class="ProName mt-3 pl-5 text-red-darken-2">
-                {{ product.unitPrice }} VND
-              </p>
-            </v-sheet>
+
+            <p class="ProName mt-3 pl-5 text-red-darken-2">
+              {{ product.unitPrice }} VND
+            </p>
             <div>
               <p class="text-h6">Nhóm hương:</p>
               <p>{{ nhomHuong }}</p>
@@ -120,14 +116,9 @@
               </v-row>
             </div>
             <v-row class="d-flex flex-row pb-4">
-              <v-col cols="12" sm="6">
-                <v-btn class="bg-red-darken-4 mr-6 w-25">Mua ngay</v-btn>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-btn class="bg-red-darken-4" @click="addToCart"
-                  >Thêm vào giỏ hàng</v-btn
-                >
-              </v-col>
+              <v-btn class="bg-red-darken-4" @click="addToCart"
+                >Thêm vào giỏ hàng</v-btn
+              >
             </v-row>
           </v-responsive>
         </v-col>

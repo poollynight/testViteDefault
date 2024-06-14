@@ -7,6 +7,8 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import "@mdi/font/css/materialdesignicons.css";
 import VueCookies from 'vue-cookies'
+import axios from 'axios'
+axios.defaults.withCredentials = true;
 const vuetify = createVuetify({
   components,
   directives,
@@ -16,6 +18,7 @@ app.config.globalProperties.$isLogin = false
 app.use(vuetify)
 app.use(router)
 app.use(VueCookies)
+// app.use(axios)
 app.mount('#app')
 router.beforeEach((to, from, next) => {
   // Kiểm tra xem trang hiện tại yêu cầu đăng nhập không

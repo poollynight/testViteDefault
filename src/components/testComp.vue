@@ -25,6 +25,7 @@
       <v-row no-gutters>
         <v-col cols="12" sm="5" align="center">
           <v-img
+          max-width="85vw"
             style="cursor: pointer"
             src="https://res.cloudinary.com/dsyysapur/image/upload/v1717643040/ODOUR_EXE/SYSTEM/cate-men_lmimzr.webp"
             @click="zoomImage = !zoomImage"
@@ -57,9 +58,7 @@
               <p class="ProName">{{ 123 }}</p>
               <p>Dành cho: {{ 123 }}</p>
             </div>
-            <v-sheet height="4rem" class="bg-grey-lighten-4 d-flex price">
-              <p class="ProName mt-3 pl-5 text-red-darken-2">{{ 123 }} VND</p>
-            </v-sheet>
+            <p class="ProName mt-3 pl-5 text-red-darken-2">{{ 123 }} VND</p>
             <div>
               <p class="text-h6">Nhóm hương:</p>
               <p>{{ 123 }}</p>
