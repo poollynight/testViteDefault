@@ -106,6 +106,7 @@ export default {
   watch: {
     $route(to, from) {
       // Kiểm tra xem route có thay đổi không
+      
       if (
         to.path === "/shop" &&
         to.path === from.path &&
@@ -117,6 +118,9 @@ export default {
       } else if (to.query.sortType !== undefined) {
         this.getProductsData();
       } else if (from.path === "/home") {
+        localStorage.setItem("cate", this.$route.query.categoryId);
+      }
+      if (from.path === "/home") {
         localStorage.setItem("cate", this.$route.query.categoryId);
       }
     },
@@ -160,7 +164,8 @@ export default {
     },
   },
   mounted() {
-    if (localStorage.getItem("cate") === null) localStorage.setItem("cate", 0);
+    // if (localStorage.getItem("cate") === null) localStorage.setItem("cate", 0);
+    localStorage.setItem("cate", this.$route.query.categoryId);
     this.getProductsData();
   },
 };

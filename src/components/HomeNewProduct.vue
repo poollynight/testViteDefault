@@ -16,7 +16,7 @@
           :loading="loading"
           type="card"
           width="300"
-          class="ma-4"
+          class="ma-4 phone-loader"
         >
           <v-responsive
             class="ma-4 text-center cursor-pointer"
@@ -53,7 +53,7 @@ import axios from "axios";
 export default {
   name: "HotTrend",
   data: () => ({
-    newProducts: [1,1,1,1],
+    newProducts: [1, 1, 1, 1],
     model: null,
     loading: true,
   }),
@@ -76,3 +76,10 @@ export default {
   },
 };
 </script>
+<style>
+@media screen and (max-width: 471px) {
+  .phone-loader {
+    width: 11em !important;
+  }
+}
+</style>

@@ -34,7 +34,7 @@
         class="pa-6"
       >
         <v-sheet
-          class="pa-2"
+          class="pa-2 phone-sheet"
           align="center"
           justify="center"
           height="350"
@@ -122,5 +122,20 @@ export default {
 .category {
   min-height: 140px;
   max-height: 200px;
+}
+@media screen and (max-width: 1280px) and (min-width: 850px) {
+  .phone-sheet {
+    max-height: 50vh;
+  }
+}
+@media screen and (max-width: 849px) and (min-width: 500px) {
+  .phone-sheet {
+    max-height: 50vh;
+  }
+}
+@media screen and (max-width: 599px) {
+  .phone-sheet {
+    max-height: 55vh;
+  }
 }
 </style>
