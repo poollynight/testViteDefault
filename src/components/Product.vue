@@ -66,7 +66,6 @@
               <p class="ProName">{{ product.name }}</p>
               <p>Dành cho: {{ product.category.name }}</p>
             </div>
-
             <p class="ProName mt-3 pl-5 text-red-darken-2">
               {{ product.unitPrice }} VND
             </p>
@@ -109,10 +108,10 @@
                   >
                     +
                   </v-btn>
-                  <v-col cols="12" sm="6"
-                    ><p>{{ product.quantityInStock }} sản phẩm có sẵn</p></v-col
-                  >
                 </v-col>
+                <v-col cols="12" sm="6"
+                  ><p>{{ product.quantityInStock }} sản phẩm có sẵn</p></v-col
+                >
               </v-row>
             </div>
             <v-row class="d-flex flex-row pb-4">

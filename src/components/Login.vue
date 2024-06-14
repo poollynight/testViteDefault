@@ -63,7 +63,6 @@ export default {
     checkLogin() {
       if (this.$cookies.get("ato")) {
         this.$isLogin = true;
-        this.$router.push("/");
       }
     },
     async Login() {
@@ -90,7 +89,7 @@ export default {
           "/"
         );
         this.$isLogin = true; // global variable
-        location.reload();
+        // location.reload();
       } catch (error) {
         console.error("There was an error!", error);
       }

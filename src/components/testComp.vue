@@ -36,7 +36,7 @@
             center-active
             show-arrows
           >
-            <v-slide-group-item v-for="n in 3" :key="n" v-slot="{ toggle }">
+            <v-slide-group-item v-for="n in 1" :key="n" v-slot="{ toggle }">
               <v-card class="ma-4" height="100" width="100" @click="toggle">
                 <v-img
                   height="200"
@@ -103,7 +103,6 @@
               </v-row>
             </div>
             <div class="d-flex flex-row pb-4">
-              <v-btn class="bg-red-darken-4 mr-6 w-25">Mua ngay</v-btn>
               <v-btn class="bg-red-darken-4" @click="addToCart"
                 >Thêm vào giỏ hàng</v-btn
               >

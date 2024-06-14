@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card class="elevation-2">
+    <v-responsive class="elevation-2">
       <v-overlay v-model="overlay" class="d-flex align-center justify-center">
         <v-progress-circular
           class="mx-auto"
@@ -12,8 +12,7 @@
       </v-overlay>
       <v-card-title class="headline">Shopping Cart</v-card-title>
       <v-divider></v-divider>
-      <v-card-text class="card-body">
-        <v-row align="center" no-gutters>
+        <v-row align="center" no-gutters class="card-header">
           <v-col cols="1"><strong></strong></v-col>
           <v-col cols="3"><strong>Product</strong></v-col>
           <v-col cols="2"><strong>Price (VND)</strong></v-col>
@@ -21,7 +20,7 @@
           <v-col cols="2"><strong>Total (VND)</strong></v-col>
           <v-col cols="1"><strong></strong></v-col>
         </v-row>
-        <v-row v-for="(item, index) in cartItems" :key="index" align="center">
+        <v-row v-for="(item, index) in cartItems" :key="index" align="center" class="cart-item">
           <v-col cols="1">
             <v-checkbox
               v-model="item.selected"
@@ -30,7 +29,9 @@
           </v-col>
           <v-col cols="3">
             <v-col cols="9">
-              <div>{{ item.name }}</div>
+              <router-link :to="'/product/' + item.productId" class="cursor-pointer">
+                <div>{{ item.name }}</div></router-link
+              >
             </v-col>
           </v-col>
           <v-col cols="2">{{ item.unitPrice }}</v-col>
@@ -40,8 +41,7 @@
               v-model="item.quantity"
               outlined
               dense
-              @input="updateCart(item, index)"
-            >
+              >
               <template v-slot:prepend>
                 <div
                   class="pe-4"
@@ -81,7 +81,6 @@
             </v-btn>
           </v-col>
         </v-row>
-      </v-card-text>
       <v-divider></v-divider>
       <v-card-actions class="card-footer">
         <v-col cols="8">
@@ -92,9 +91,8 @@
                 v-model="selectAll"
                 :true-value="true"
                 :false-value="false"
-                label="Select All"
                 @click="toggleAll"
-              ></v-checkbox>
+              >Select All</v-checkbox>
             </v-col>
             <v-col cols="4">
               <h3>Product(s)</h3>
@@ -106,11 +104,11 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="3" class="text-right">
-          <v-btn color="primary" @click="checkout">Checkout</v-btn>
+        <v-col cols="3" class="text-right ">
+          <v-btn color="primary" class="checkout-btn" @click="checkout">Checkout</v-btn>
         </v-col>
       </v-card-actions>
-    </v-card>
+    </v-responsive>
   </v-container>
 </template>
 
@@ -126,6 +124,7 @@ export default {
       totalPrice: 0,
       selectAll: false,
       isLogin: false,
+      oldQuantity: 0,
     };
   },
   computed: {
@@ -133,24 +132,50 @@ export default {
       return this.cartItems.filter((item) => item.selected);
     },
   },
+  created:{
+    $router(from){
+      if(from.path == '/login' && $cookies.get('ato') !== null){
+        console.log('login');
+      }
+    }
+  },
   methods: {
+    async syncGuestCart() {
+      
+    },
     async removeProductFromCart(item, index) {
-      try {
-        const response = await axios.post(
-          "https://main.odour.site/user/cart/remove",
-          {
-            productId: item.id,
-            quantity: item.quantity,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${this.$cookies.get("ato")}`,
+      if (this.isLogin == false) {
+        try {
+          const res = await axios.get(
+            "https://main.odour.site/guest/cart/remove",
+            {
+              productId: item.id,
+              quantity: item.quantity,
+            }
+          );
+          this.cartItems = res.data.body.orderItems;
+          console.log(res);
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        try {
+          const response = await axios.post(
+            "https://main.odour.site/user/cart/remove",
+            {
+              productId: item.id,
+              quantity: item.quantity,
             },
-          }
-        );
-        if (response.status == 200) this.cartItems.splice(index, 1);
-      } catch (error) {
-        console.log(error);
+            {
+              headers: {
+                Authorization: `Bearer ${this.$cookies.get("ato")}`,
+              },
+            }
+          );
+          if (response.status == 200) this.cartItems.splice(index, 1);
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
     calculateTotal(items) {
@@ -205,7 +230,6 @@ export default {
             },
           });
           this.cartItems = res.data.body.orderItems;
-          console.log(res);
         } catch (err) {
           console.log(err);
           if (err.response.status == 401) {
@@ -219,23 +243,37 @@ export default {
     async updateCartAddQuantity(product, index) {
       if (product.quantity == 0) return;
       this.overlay = true;
-      try {
-        const response = await axios.post(
-          "https://main.odour.site/user/cart/add",
-          {
-            productId: product.id,
-            quantity: ++product.quantity,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${this.$cookies.get("ato")}`,
+      if (this.isLogin == false) {
+        try {
+          const res = await axios.get(
+            "https://main.odour.site/guest/cart/add",
+            {
+              productId: item.id,
+              quantity: item.quantity,
+            }
+          );
+          this.cartItems = res.data.body.orderItems;
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        try {
+          const response = await axios.post(
+            "https://main.odour.site/user/cart/add",
+            {
+              productId: product.id,
+              quantity: ++product.quantity,
             },
-          }
-        );
-        this.updateQuantity(product, index);
-        console.log("Success" + response);
-      } catch (error) {
-        console.log(error);
+            {
+              headers: {
+                Authorization: `Bearer ${this.$cookies.get("ato")}`,
+              },
+            }
+          );
+          this.updateQuantity(product, index);
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
 
@@ -243,24 +281,38 @@ export default {
     async updateCartSubtractQuantity(product, index) {
       if (product.quantity == 0) return;
       this.overlay = true;
-      try {
-        const response = await axios.post(
-          "https://main.odour.site/user/cart/remove",
-          {
-            productId: product.id,
-            quantity: --product.quantity,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${this.$cookies.get("ato")}`,
+      if (this.isLogin == false) {
+        try {
+          const res = await axios.get(
+            "https://main.odour.site/guest/cart/remove",
+            {
+              productId: item.id,
+              quantity: item.quantity,
+            }
+          );
+          this.cartItems = res.data.body.orderItems;
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        try {
+          const response = await axios.post(
+            "https://main.odour.site/user/cart/remove",
+            {
+              productId: product.id,
+              quantity: --product.quantity,
             },
+            {
+              headers: {
+                Authorization: `Bearer ${this.$cookies.get("ato")}`,
+              },
+            }
+          );
+          this.updateQuantity(product, index);
+        } catch (error) {
+          console.log(error);
+          if (error.response.status == 401) {
           }
-        );
-        this.updateQuantity(product, index);
-        console.log("Success" + response);
-      } catch (error) {
-        console.log(error);
-        if (error.response.status == 401) {
         }
       }
     },
@@ -283,7 +335,6 @@ export default {
           }
         );
         this.updateQuantity(product, index);
-        console.log("Success" + response);
       } catch (error) {
         console.log(error);
       }
@@ -312,7 +363,6 @@ export default {
   mounted() {
     this.getCartFromAPI();
     if (this.$cookies.get("ato")) {
-      console.log("cookie found");
     }
   },
 };
@@ -326,11 +376,18 @@ export default {
   .headline {
     font-size: 1em;
   }
-  .card-footer {
-    font-size: 4vw;
+  .card-footer, .card-footer .checkout-btn {
+    font-size: 1.5vw;
   }
+ 
   .card-footer .v-input--selection-controls__input .v-icon {
     font-size: 16px; /* Change the font size here */
+  }
+  .card-header{
+    font-size: 1.5vw;
+  }
+  .cart-item{
+    font-size: 2vw;
   }
 }
 </style>

@@ -1,4 +1,5 @@
 <template>
+  <test></test>
   <v-carousel
     height="60vh"
     class="carousel"
@@ -125,9 +126,9 @@ export default {
   min-height: 140px;
   max-height: 200px;
 }
-@media screen and (max-width: 350px) {
+@media screen and (max-width: 350px) and (min-width: 100px) {
   .phone-sheet {
-    max-height: 40vh;
+    max-height: 110vw;
   }
   .carousel {
     height: 46vw !important;
