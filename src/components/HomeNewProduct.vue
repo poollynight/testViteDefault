@@ -28,18 +28,13 @@
               toggle;
             "
           >
-            <v-img
-              :src="item.medias[0].storageUrl"
-              cover
-            ></v-img>
-            <div class="product-text">
+            <v-img :src="item.medias[0].storageUrl" cover></v-img>
+            <div class="home-product-text">
               <p class="text-h5 text-black">{{ item.name }}</p>
-              <p class="text-red text-h6">
-                {{ item.unitPrice }} VND</p
-              >
+              <p class="text-red text-h6">{{ item.unitPrice }} VND</p>
               <p class="text-black text-h8">
-                {{ item.productStatus }}</p
-              >
+                {{ item.productStatus }}
+              </p>
             </div>
           </v-responsive>
         </v-skeleton-loader>
@@ -80,10 +75,10 @@ export default {
   font-size: x-large;
 }
 @media screen and (max-width: 471px) {
-  .product-text {
+  .home-product-text {
     font-size: small;
   }
-  .product-text p:first-child {
+  .home-product-text p:first-child {
     height: 8vh;
   }
 }
