@@ -102,7 +102,7 @@ export default {
     max-height: 70vh;
   }
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1192px) {
   .home-product-text {
     font-size: medium;
   }

@@ -30,9 +30,9 @@
           >
             <v-img :src="item.medias[0].storageUrl" width="100%" cover></v-img>
             <div class="home-product-text">
-              <p class="text-h5 text-black">{{ item.name }}</p>
-              <p class="text-red text-h6">{{ item.unitPrice }} VND</p>
-              <p class="text-black text-h8">
+              <p class="text-black">{{ item.name }}</p>
+              <p class="text-red">{{ item.unitPrice }} VND</p>
+              <p class="text-black">
                 {{ item.productStatus }}
               </p>
             </div>
@@ -98,7 +98,7 @@ export default {
     max-height: 70vh;
   }
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1192px) {
   .home-product-text {
     font-size: medium;
   }
