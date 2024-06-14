@@ -1,6 +1,6 @@
 <template>
   <v-carousel
-    height="75vh"
+    height="60vh"
     class="carousel"
     show-arrows="hover"
     cycle
@@ -72,7 +72,7 @@ export default {
   components: {
     HotTrend,
     NewProduct,
-    test
+    test,
   },
   data() {
     return {
@@ -129,15 +129,24 @@ export default {
   .phone-sheet {
     max-height: 40vh;
   }
+  .carousel {
+    height: 46vw !important;
+  }
 }
 @media screen and (max-width: 399px) and (min-width: 351px) {
   .phone-sheet {
     max-height: 60vh;
   }
+  .carousel {
+    height: 30vh !important;
+  }
 }
 @media screen and (max-width: 599px) and (min-width: 400px) {
   .phone-sheet {
     max-height: 70vh;
+  }
+  .carousel {
+    height: 30vh !important;
   }
 }
 @media screen and (max-width: 1279px) and (min-width: 600px) {

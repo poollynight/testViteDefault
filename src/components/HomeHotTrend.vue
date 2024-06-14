@@ -86,19 +86,19 @@ export default {
     max-height: 70vh;
   }
 }
-@media screen and (max-width: 599px) and (min-width: 426px) {
+@media screen and (max-width: 690px) and (min-width: 426px) {
   .home-product-text {
     font-size: small;
   }
   .home-product-text p:first-child {
-    height: 35px !important;
+    height: 40px !important;
   }
   .phone-loader {
     width: 35vw !important;
     max-height: 70vh;
   }
 }
-@media screen and (max-width: 794px) and (min-width: 600px) {
+@media screen and (max-width: 794px) and (min-width: 690px) {
   .home-product-text {
     font-size: medium;
   }
