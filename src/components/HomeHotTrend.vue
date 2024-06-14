@@ -79,7 +79,7 @@ export default {
     font-size: small;
   }
   .home-product-text p:first-child {
-    height: 35px !important;
+    height: 40px !important;
   }
   .phone-loader {
     width: 45vw !important;
