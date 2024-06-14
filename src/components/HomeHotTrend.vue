@@ -98,7 +98,15 @@ export default {
     max-height: 70vw;
   }
 }
-@media screen and (max-width: 1192px) {
+@media screen and (max-width: 830px) and (min-width: 600px) {
+  .home-product-text {
+    font-size: medium;
+  }
+  .home-product-text p:first-child {
+    height: 45px !important;
+  }
+}
+@media screen and (max-width: 1192px) and (min-width: 600px) {
   .home-product-text {
     font-size: medium;
   }
