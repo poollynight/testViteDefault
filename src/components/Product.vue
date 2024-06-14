@@ -65,7 +65,7 @@
               <p class="ProName">{{ product.name }}</p>
               <p>Dành cho: {{ product.category.name }}</p>
             </div>
-            <v-sheet height="4rem" class="bg-grey-lighten-4 d-flex">
+            <v-sheet height="4rem" width="100%" class="bg-grey-lighten-4 d-flex">
               <p class="ProName mt-3 pl-5 text-red-darken-2">
                 {{ product.unitPrice }} VND
               </p>
@@ -76,7 +76,7 @@
             </div>
             <div>
               <p class="text-h6">Tầng hương:</p>
-              <p class="text-subtitle-1">
+              <p>
                 Tầng đầu: {{ tangHuongDau }}
                 <br />
                 Tầng giữa: {{ tangHuongGiua }}
@@ -86,7 +86,7 @@
             </div>
             <div>
               <p class="text-h6">Độ lưu hương:</p>
-              <p class="text-subtitle-1">
+              <p>
                 Trên da: 14 - 18 giờ
                 <br />
                 Trên vải: 2 - 3 ngày
@@ -180,7 +180,7 @@
   margin-bottom: 1rem;
 }
 .ProName {
-  font-size: xx-large;
+  font-size: x-large;
 }
 </style>
 
