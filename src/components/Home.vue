@@ -38,7 +38,7 @@
           align="center"
           justify="center"
           height="350"
-          max-width="320"
+          max-width="335"
         >
           <v-img
             min-width="auto"
@@ -136,7 +136,7 @@ export default {
 }
 @media screen and (max-width: 599px) {
   .phone-sheet {
-    max-height: 55vh;
+    height: 55vh;
   }
 }
 </style>

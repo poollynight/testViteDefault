@@ -79,7 +79,7 @@ export default {
 <style>
 @media screen and (max-width: 471px) {
   .phone-loader {
-    width: 17em !important;
+    width: 15em !important;
   }
 }
 </style>
