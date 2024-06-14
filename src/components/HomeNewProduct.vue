@@ -94,7 +94,7 @@ export default {
     height: 40px !important;
   }
   .phone-loader {
-    width: 35vw !important;
+    width: 40vw !important;
     max-height: 70vh;
   }
 }
