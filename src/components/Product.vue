@@ -93,7 +93,7 @@
               </p>
             </div>
             <div>
-              <p class="text-h5">Số lượng</p>
+              <p class="text-h5 mb-7">Số lượng</p>
               <v-row>
                 <v-col class="d-flex" cols="12">
                   <v-btn
