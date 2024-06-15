@@ -18,7 +18,6 @@ app.config.globalProperties.$isLogin = false
 app.use(vuetify)
 app.use(router)
 app.use(VueCookies)
-// app.use(axios)
 app.mount('#app')
 router.beforeEach((to, from, next) => {
   // Kiểm tra xem trang hiện tại yêu cầu đăng nhập không

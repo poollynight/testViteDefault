@@ -30,7 +30,11 @@
                 ><v-btn width="100%" type="submit" color="red-darken-2"
                   >Đăng nhập</v-btn
                 >
-                <p class="text-center pa-3"><router-link class="text-red-darken-4" to="/forgotPassword">Quên mật khẩu?</router-link></p>
+                <p class="text-center pa-3">
+                  <router-link class="text-red-darken-4" to="/forgotPassword"
+                    >Quên mật khẩu?</router-link
+                  >
+                </p>
                 <p class="text-center pa-3">
                   Bạn mới biết đến Odour?
                   <router-link to="/register" class="text-red-darken-4"
@@ -63,6 +67,10 @@ export default {
     checkLogin() {
       if (this.$cookies.get("ato")) {
         this.$isLogin = true;
+        if (this.$route.query.redirect !== "/logout" && this.$route.query.redirect !== undefined) {
+          this.$router.push(this.$route.query.redirect);
+        } else if(this.$route.query.redirect == '/user/cart') this.syncCart();
+        else this.$router.push("/");
       }
     },
     async Login() {
@@ -89,6 +97,7 @@ export default {
           "/"
         );
         this.$isLogin = true; // global variable
+        window.location.reload()
         // location.reload();
       } catch (error) {
         console.error("There was an error!", error);

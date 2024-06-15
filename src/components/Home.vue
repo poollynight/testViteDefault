@@ -1,5 +1,4 @@
 <template>
-  <test></test>
   <v-carousel
     height="60vh"
     class="carousel"

@@ -35,7 +35,7 @@
             Đăng nhập
           </router-link>
         </v-list-item>
-        <v-list-item v-if="isLogin">
+        <div v-if="isLogin">
           <v-list-item v-for="(item, index) in selfManage" :key="index">
             <router-link
               :to="'/' + item.value"
@@ -44,8 +44,8 @@
                 item.title
               }}</v-list-item-title></router-link
             >
-          </v-list-item></v-list-item
-        >
+          </v-list-item>
+        </div>
       </v-list>
     </v-navigation-drawer>
   </div>
