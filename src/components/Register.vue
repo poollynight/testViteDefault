@@ -38,8 +38,10 @@
                 >
                 <p class="text-center pa-3">
                   Bạn đã có tài khoản?
-                  <router-link to="/login" class="text-red-darken-4"
-                    >Đăng nhập</router-link
+                  <span
+                    class="text-red-darken-4 cursor-pointer"
+                    @click="toLoginPage()"
+                    >Đăng nhập</span
                   >
                 </p>
               </v-col>
@@ -121,7 +123,7 @@
             <v-btn
               @click="
                 loadSuccessDialog = false;
-                $route.push('/login');
+                this.$router.push('/login');
               "
               class="mb-1"
               >Đóng</v-btn
@@ -234,13 +236,16 @@ export default {
         this.loadErrorDialog = true;
       }
     },
+    toLoginPage() {
+      if (
+        this.$route.query.redirect !== "/logout" &&
+        this.$route.query.redirect !== undefined
+      )
+        this.$router.push("/login?redirect=" + this.$route.query.redirect);
+      else this.$router.push("/login");
+    },
   },
   watch: {
-    // loadDialog(val) {
-    //   if (!val) return;
-    //   setTimeout(() => (this.loadDialog = false), 2000);
-    //   setTimeout(() => (this.loadSuccessDialog = true), 2000);
-    // },
     loadSuccessDialog(val) {
       if (!val) return;
       setTimeout(() => (this.loadSuccessDialog = false), 3000);

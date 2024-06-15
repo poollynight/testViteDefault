@@ -12,6 +12,7 @@ import Profile from './components/Profile.vue'
 import CheckOut from './components/CheckOut.vue'
 import ForgotPassword from './components/ForgotPassword.vue'
 import MyOrders from './components/MyOrders.vue'
+import MyOrderDetail from './components/MyOrderDetail.vue'
 import ShopProductList from './components/ShopProductList.vue'
 import ErrorPage from './components/ErrorPage.vue';
 const routes = [
@@ -29,9 +30,14 @@ const routes = [
         meta: { requiresAuth: true } 
     },
     {
-        path: '/myOrders',
+        path: '/user/orders/',
         component: MyOrders,
-        // meta: { requiresAuth: true }
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/user/orders/:id',
+        component: MyOrderDetail,
+        meta: { requiresAuth: true }
     },
     {
         path: '/auth/confirmEmail',

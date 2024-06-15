@@ -67,7 +67,13 @@
               to="/user/cart"
               class="text-decoration-none text-black"
             >
-              <v-icon class="text-h5">mdi-cart</v-icon>
+              <!-- <v-icon class="text-h5">mdi-cart </v-icon> -->
+              <v-badge color="red" overlap>
+                <template v-slot:badge>
+                  <span>{{ cartNumber }}</span>
+                </template>
+                <v-icon class="text-h5">mdi-cart</v-icon>
+              </v-badge>
             </router-link>
             <router-link
               to="/login"
@@ -92,13 +98,19 @@
 </template>
 <script>
 import ProfileIcon from "./NavbarProfileIcon.vue";
-
 export default {
   components: {
     ProfileIcon,
   },
+  props: {
+    cartNumber: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
+      // cartNumber: null,
       tab: null,
       isLogin: false,
       navigatorLg: [
@@ -117,6 +129,7 @@ export default {
       ],
     };
   },
+
   methods: {
     backHome() {
       this.$refs.home.$el.click();
@@ -130,6 +143,7 @@ export default {
   },
   mounted() {
     this.checkLogin();
+    // this.getCartFromAPI();
   },
 };
 </script>

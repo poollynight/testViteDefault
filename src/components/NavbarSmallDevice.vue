@@ -61,6 +61,7 @@ export default {
       drawer: false,
       selfManage: [
         { title: "Quản lí tài khoản", value: "user/profile" },
+        { title: "Đơn hàng của tôi", value: "user/orders/?type=0" },
         { title: "Đăng xuất", value: "logout" },
       ],
       navigator: [

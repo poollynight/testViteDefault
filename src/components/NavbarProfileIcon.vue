@@ -21,7 +21,7 @@
               </v-btn></router-link
             >
             <v-divider class="my-3"></v-divider>
-            <router-link to="/profile">
+            <router-link to="/user/orders/?type=0">
               <v-btn variant="text" rounded>
                 Đơn hàng của tôi
               </v-btn></router-link

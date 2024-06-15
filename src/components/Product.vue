@@ -32,7 +32,7 @@
             <v-img
               style="cursor: pointer"
               height="auto"
-              width="300"
+              width="60vw"
               cover
               :src="product.medias[0].storageUrl"
               @click="zoomImage = !zoomImage"
@@ -147,18 +147,15 @@
           <v-responsive
             class="ma-4 text-center"
             color="grey-lighten-1"
-            height="350"
-            width="290"
+            max-height="400"
+            max-width="300"
+            width="35vw"
             @click="
               onProductClick(item.id);
               toggle;
             "
           >
-            <v-img
-              max-height="250px"
-              :src="item.medias[0].storageUrl"
-              cover
-            ></v-img>
+            <v-img max-height="300px" :src="item.medias[0].storageUrl"></v-img>
             <div class="product-text">
               <p class="text-h6 text-black">{{ item.name }}</p>
               <v-card-subtitle class="text-red text-h6">
@@ -191,7 +188,19 @@
 
 <script>
 import axios from "axios";
+import { inject } from "vue";
 export default {
+  setup() {
+    const cartNumber = inject("cartNumber");
+
+    const check = () => {
+      cartNumber.value++;
+    };
+
+    return {
+      check,
+    };
+  },
   data: () => ({
     zoomImage: false,
     nhomHuong: "",
@@ -218,26 +227,23 @@ export default {
     },
 
     async addToCart() {
-      const bill = {
-        product: this.product.id,
-        quantity: this.quantity,
-      };
       if (this.$cookies.get("ato") == null) {
         try {
-          const response = await axios.post(
+          await axios.post(
             "https://main.odour.site/guest/cart/add",
             {
               productId: this.product.id,
               quantity: this.quantity,
-            }
+            },
+            { withCredentials: true }
           );
-          console.log(response);
+          this.$emit("add-to-cart");
         } catch (error) {
           console.log(error);
         }
       } else {
         try {
-          const response = await axios.post(
+          await axios.post(
             "https://main.odour.site/user/cart/add",
             {
               productId: this.product.id,
@@ -249,7 +255,6 @@ export default {
               },
             }
           );
-          console.log("Success" + response);
         } catch (error) {
           console.log(error);
           this.refreshToken();

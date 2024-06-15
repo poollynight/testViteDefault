@@ -123,6 +123,7 @@
 
 <script>
 import axios from "axios";
+// axios.defaults.withCredentials = true;
 export default {
   data() {
     return {
@@ -143,7 +144,6 @@ export default {
     },
   },
   methods: {
-    async syncGuestCart() {},
     async removeProductFromCart(item, index) {
       if (this.isLogin == false) {
         try {
@@ -152,9 +152,12 @@ export default {
             {
               productId: item.id,
               quantity: item.quantity,
-            }
+            },
+            { withCredentials: true }
           );
-          this.cartItems = res.data.body.orderItems;
+          // this.cartItems = res.data.body.orderItems;
+          this.cartItems.splice(index, 1);
+          this.$emit("remove-from-cart");
         } catch (err) {
           console.log(err);
         }
@@ -173,6 +176,7 @@ export default {
             }
           );
           if (response.status == 200) this.cartItems.splice(index, 1);
+          this.$emit("remove-from-cart");
         } catch (error) {
           console.log(error);
         }
@@ -180,10 +184,7 @@ export default {
     },
     calculateTotal(items) {
       this.totalQuantity = 0;
-      this.totalQuantity = items.reduce(
-        (total, item) => parseInt(total) + parseInt(item.quantity),
-        0
-      );
+      this.totalQuantity = items.length;
 
       this.totalPrice = 0;
       this.totalPrice = items.reduce(
@@ -222,12 +223,13 @@ export default {
     async getCartFromAPI() {
       if (this.isLogin == false) {
         try {
-          const res = await axios.get("https://main.odour.site/guest/cart");
+          const res = await axios.get("https://main.odour.site/guest/cart", {
+            withCredentials: true,
+          });
           this.cartItems = JSON.parse(JSON.stringify(res.data.body.orderItems));
           this.cartItemsCopy = JSON.parse(
             JSON.stringify(res.data.body.orderItems)
           );
-          console.log(res);
         } catch (err) {
           console.log(err);
         }
@@ -261,7 +263,8 @@ export default {
             {
               productId: product.id,
               quantity: 1,
-            }
+            },
+            { withCredentials: true }
           );
           this.updateQuantity(product, index, "add");
         } catch (err) {
@@ -301,7 +304,8 @@ export default {
             {
               productId: product.id,
               quantity: 1,
-            }
+            },
+            { withCredentials: true }
           );
           this.updateQuantity(product, index, "remove");
         } catch (err) {
@@ -339,6 +343,7 @@ export default {
       if (product.quantity < this.cartItemsCopy[index].quantity)
         apiURL = `https://main.odour.site/${apiRoute}/cart/remove`;
       else apiURL = `https://main.odour.site/${apiRoute}/cart/add`;
+      // console.log(apiURL);
       try {
         await axios.post(
           `${apiURL}`,
@@ -387,6 +392,7 @@ export default {
   mounted() {
     if (this.$cookies.get("ato") !== null) this.isLogin = true;
     this.getCartFromAPI();
+    // this.refreshToken();
   },
 };
 </script>

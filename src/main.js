@@ -7,8 +7,8 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import "@mdi/font/css/materialdesignicons.css";
 import VueCookies from 'vue-cookies'
-import axios from 'axios'
-axios.defaults.withCredentials = true;
+// import axios from 'axios'
+// axios.defaults.withCredentials = true;
 const vuetify = createVuetify({
   components,
   directives,
@@ -28,14 +28,14 @@ router.beforeEach((to, from, next) => {
         path: '/login',
         query: { redirect: to.fullPath } // lưu lại địa chỉ của trang cần truy cập để sau khi đăng nhập thành công, chuyển hướng lại đúng trang đó
       })
-      window.scrollTo(0);
+      window.scrollTo(0,0);
     } else {
       next() // Nếu đã đăng nhập, cho phép truy cập
-      window.scrollTo(0);
+      window.scrollTo(0,0);
     }
   } else {
     next() // Nếu không yêu cầu đăng nhập, cho phép truy cập
-    window.scrollTo(0);
+    window.scrollTo(0,0);
   }
 })
 function isLoggedIn() {

@@ -37,8 +37,10 @@
                 </p>
                 <p class="text-center pa-3">
                   Bạn mới biết đến Odour?
-                  <router-link to="/register" class="text-red-darken-4"
-                    >Đăng ký</router-link
+                  <span
+                    @click="toRegisterPage"
+                    class="text-red-darken-4 cursor-pointer"
+                    >Đăng ký</span
                   >
                 </p>
               </v-col>
@@ -67,9 +69,14 @@ export default {
     checkLogin() {
       if (this.$cookies.get("ato")) {
         this.$isLogin = true;
-        if (this.$route.query.redirect !== "/logout" && this.$route.query.redirect !== undefined) {
+        if (this.$route.query.redirect == "/checkout") {
+          this.syncGuestCart();
           this.$router.push(this.$route.query.redirect);
-        } else if(this.$route.query.redirect == '/user/cart') this.syncCart();
+        } else if (
+          this.$route.query.redirect !== "/logout" &&
+          this.$route.query.redirect !== undefined
+        )
+          this.$router.push(this.$route.query.redirect);
         else this.$router.push("/");
       }
     },
@@ -97,10 +104,35 @@ export default {
           "/"
         );
         this.$isLogin = true; // global variable
-        window.location.reload()
+        this.syncGuestCart();
         // location.reload();
       } catch (error) {
         console.error("There was an error!", error);
+      }
+    },
+    toRegisterPage() {
+      if (
+        this.$route.query.redirect !== "/logout" &&
+        this.$route.query.redirect !== undefined
+      )
+        this.$router.push("/register?redirect=" + this.$route.query.redirect);
+      else this.$router.push("/register");
+    },
+    async syncGuestCart() {
+      try {
+        const response = await axios.get(
+          "https://main.odour.site/guest/cart/sync",
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${this.$cookies.get("ato")}`,
+            },
+          }
+        );
+        console.log(response);
+        window.location.reload();
+      } catch (error) {
+        console.error("There was an error sync!", error);
       }
     },
   },

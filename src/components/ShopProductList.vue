@@ -1,7 +1,8 @@
 <template>
-  <div class="min-height-500">
+  <div class="min-height-500" width="100%">
     <v-row>
       <v-col
+        style="overflow-x: auto"
         v-for="item in products"
         :key="item.Id"
         :item="item"
@@ -106,7 +107,7 @@ export default {
   watch: {
     $route(to, from) {
       // Kiểm tra xem route có thay đổi không
-      
+
       if (
         to.path === "/shop" &&
         to.path === from.path &&

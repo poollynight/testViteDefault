@@ -13,6 +13,7 @@ export default {
           this.$cookies.remove("ato");
           this.$cookies.remove("confe");
           this.$cookies.remove("e");
+          this.$cookies.remove("rt");
           location.reload();
         }
       } catch (error) {
