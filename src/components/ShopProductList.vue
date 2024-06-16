@@ -77,11 +77,11 @@ export default {
       sortTypes: [
         {
           title: "Tên A-Z",
-          value: "prod:name:desc",
+          value: "prod:name:asc",
         },
         {
           title: "Tên Z-A",
-          value: "prod:name:asc",
+          value: "prod:name:desc",
         },
         { title: "Giá giảm dần", value: "prod:price:desc" },
         { title: "Giá tăng dần", value: "prod:price:asc" },
