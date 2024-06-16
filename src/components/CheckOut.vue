@@ -1,4 +1,13 @@
 <template>
+  <v-overlay v-model="overlay" class="d-flex align-center justify-center">
+    <v-progress-circular
+      class="mx-auto"
+      color="primary"
+      indeterminate="disable-shrink"
+      size="50"
+      width="4"
+    ></v-progress-circular>
+  </v-overlay>
   <v-container>
     <v-alert
       style="z-index: 100; position: relative"
@@ -6,6 +15,13 @@
       text=""
       title="Đặt hàng thành công"
       type="success"
+    ></v-alert>
+    <v-alert
+      style="z-index: 100; position: relative"
+      v-model="showAlertDanger"
+      text=""
+      :title='alertDangerTitle'
+      type="red-darken-2"
     ></v-alert>
     <v-row class="mt-5">
       <!-- Column for Product Information -->
@@ -53,35 +69,50 @@
           <v-divider></v-divider>
           <v-card-text>
             <!-- Checkout Form -->
-            <v-form @submit.prevent="submitOrder">
+            <v-form>
               <v-text-field
                 v-model="customer.name"
                 label="Họ và tên"
+                :rules="stringRules"
+                variant="solo"
               ></v-text-field>
               <v-text-field
                 v-model="customer.phone"
                 label="Số điện thoại"
+                :rules="stringRules"
+                variant="solo"
               ></v-text-field>
               <v-select
                 v-model="customer.province"
                 :items="provinceNames"
                 label="Tỉnh/Thành phố"
+                variant="solo"
               ></v-select>
               <v-select
                 v-model="customer.district"
                 :items="districtNames"
                 label="Quận/Huyện"
+                variant="solo"
               ></v-select>
               <v-select
                 v-model="customer.ward"
                 :items="wardNames"
                 label="Phường/Xã"
+                variant="solo"
               ></v-select>
               <v-text-field
                 v-model="customer.address"
                 label="Địa chỉ"
+                :rules="stringRules"
+                variant="solo"
               ></v-text-field>
-              <v-btn color="red-darken-4" @click="submitOrder" type="submit"
+              <v-select
+                v-model="customer.payMethod"
+                :items="getPayMethod"
+                label="Phương thức thanh toán"
+                variant="solo"
+              ></v-select>
+              <v-btn color="red-darken-4" @click="submitOrder" type="button"
                 >Đặt hàng</v-btn
               >
             </v-form>
@@ -97,7 +128,10 @@ import axios from "axios";
 export default {
   data() {
     return {
-      cartItems: [{ name: "Product 1", quantity: 2, price: 10 }],
+      productQuantity: 0,
+      overlay: false,
+      cartItems: [],
+      apiCartInput: [],
       customer: {
         name: "",
         phone: "",
@@ -105,12 +139,23 @@ export default {
         district: "",
         ward: "",
         address: "",
+        payMethod: "",
       },
       provinces: [], // Example data for provinces
       districts: [], // Example data for districts
       wards: [], // Example data for wards
+      payMethods: [
+        {
+          id: "845e7be4-b3e3-4483-9fde-65694ee2d9b9",
+          name: "Thanh toán khi nhận hàng",
+        },
+        { id: "885e24a5-2e53-4c91-8a44-281be8fe4a17", name: "Chuyển khoản" },
+      ],
       showAlert: false,
+      showAlertDanger: false,
+      alertDangerTitle: '',
       totalPrice: 0,
+      stringRules: [(v) => !!v || "Trường này không được để trống"],
     };
   },
   watch: {
@@ -153,20 +198,77 @@ export default {
     wardNames() {
       return this.wards.map((ward) => ward.name);
     },
+    getPayMethod() {
+      return this.payMethods.map((payMethod) => payMethod.name);
+    },
   },
   methods: {
     loadBill() {
       this.cartItems = JSON.parse(localStorage.getItem("cart"));
+      this.cartItems.forEach((element) => {
+        var obj = {
+          productId: element.id,
+          quantity: element.quantity,
+        };
+        this.apiCartInput.push(obj);
+      });
     },
-    submitOrder() {
+    async submitOrder() {
+      this.showAlertDanger = false
+      this.overlay = true;
+      var count = 0;
       for (let key in this.customer) {
         if (this.customer[key] !== "") {
-          this.showAlert = true;
-          setTimeout(() => {
-            this.$router.push("/");
-          }, 2000);
+          count++;
         }
       }
+      if (count === 7) {
+        try {
+          await axios.post(
+            "https://main.odour.site/user/order/",
+            {
+              fullname: this.customer.name,
+              phoneNumber: this.customer.phone,
+              deliveredAddress:
+                this.customer.province +
+                "," +
+                this.customer.district +
+                "," +
+                this.customer.ward +
+                "," +
+                this.customer.address,
+              orderNote: "no",
+              paymentMethodId: this.payMethods.find(
+                (item) => item.name === this.customer.payMethod
+              ).id,
+              orderItems: this.apiCartInput,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${this.$cookies.get("ato")}`,
+              },
+            }
+          );
+          console.log("Order created successfully");
+          this.showAlert = true;
+          this.overlay = false;
+          this.$emit("remove-from-cart", this.productQuantity);
+        } catch (err) {
+          console.log(err);
+          if (err.response.status == 401) {
+            this.alertDangerTitle = "Lỗi hệ thống!";
+            this.showAlertDanger = true;
+            this.refreshToken();
+          }
+        }
+      } else{
+        this.alertDangerTitle = "Vui lòng nhập đủ các trường!";
+        this.showAlertDanger = true;
+        this.overlay = false;
+      }
+      setTimeout(() => {
+        this.$router.push("/");
+      }, 2000);
     },
     async getVietnamProvinces() {
       try {
@@ -210,10 +312,33 @@ export default {
         console.log(err);
       }
     },
+
+    async refreshToken() {
+      try {
+        const response = await axios.post(
+          "https://main.odour.site/auth/refreshAccessToken",
+          {
+            refreshToken: this.$cookies.get("rt"),
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.$cookies.get("ato")}`,
+            },
+          }
+        );
+        this.$cookies.set("ato", response.data.body.newAccessToken);
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   mounted() {
     this.loadBill();
     this.getVietnamProvinces();
+    this.apiCartInput.forEach(element => {
+      this.productQuantity += element.quantity
+    });
   },
 };
 </script>

@@ -10,14 +10,14 @@
           width="4"
         ></v-progress-circular>
       </v-overlay>
-      <v-card-title class="headline">Shopping Cart</v-card-title>
+      <v-card-title class="headline">Giỏ hàng</v-card-title>
       <v-divider></v-divider>
       <v-row align="center" no-gutters class="card-header">
         <v-col cols="1"><strong></strong></v-col>
-        <v-col cols="3"><strong>Product</strong></v-col>
-        <v-col cols="2"><strong>Price (VND)</strong></v-col>
-        <v-col cols="2" class="text-center"><strong>Quantity</strong></v-col>
-        <v-col cols="2"><strong>Total (VND)</strong></v-col>
+        <v-col cols="3"><strong>Sản phẩm</strong></v-col>
+        <v-col cols="2"><strong>Đơn giá (VND)</strong></v-col>
+        <v-col cols="2" class="text-center"><strong>Số lượng</strong></v-col>
+        <v-col cols="2"><strong>Tổng tiền (VND)</strong></v-col>
         <v-col cols="1"><strong></strong></v-col>
       </v-row>
       <v-row
@@ -33,11 +33,9 @@
           ></v-checkbox>
         </v-col>
         <v-col cols="3">
-          <v-col cols="9">
-            <router-link :to="'/product/' + item.id" class="cursor-pointer">
-              <div>{{ item.name }}</div></router-link
-            >
-          </v-col>
+          <router-link :to="'/product/' + item.id" class="cursor-pointer">
+            <div>{{ item.name }}</div></router-link
+          >
         </v-col>
         <v-col cols="2">{{ item.unitPrice }}</v-col>
         <v-col cols="2">
@@ -92,28 +90,28 @@
         <v-col cols="8">
           <v-row align="center">
             <v-col cols="4">
+              <p>Select All</p>
               <v-checkbox
                 class="card-footer"
                 v-model="selectAll"
                 :true-value="true"
                 :false-value="false"
                 @click="toggleAll"
-                >Select All</v-checkbox
-              >
+              ></v-checkbox>
             </v-col>
             <v-col cols="4">
-              <h3>Product(s)</h3>
+              <h3>Sản phẩm</h3>
               <p>{{ totalQuantity }}</p>
             </v-col>
             <v-col cols="4">
-              <h3>Total (VND)</h3>
+              <h3>Thành tiền (VND)</h3>
               <p>{{ totalPrice }}</p>
             </v-col>
           </v-row>
         </v-col>
         <v-col cols="3" class="text-right">
           <v-btn color="primary" class="checkout-btn" @click="checkout"
-            >Checkout</v-btn
+            >Đặt hàng</v-btn
           >
         </v-col>
       </v-card-actions>
@@ -127,7 +125,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      overlay: false,
+      overlay: true,
       cartItems: [],
       cartItemsCopy: null,
       productWanted: [],
@@ -145,19 +143,20 @@ export default {
   },
   methods: {
     async removeProductFromCart(item, index) {
+      this.overlay = true;
       if (this.isLogin == false) {
         try {
           const res = await axios.post(
             "https://main.odour.site/guest/cart/remove",
             {
               productId: item.id,
-              quantity: item.quantity,
+              quantity: Math.abs(item.quantity),
             },
             { withCredentials: true }
           );
           // this.cartItems = res.data.body.orderItems;
           this.cartItems.splice(index, 1);
-          this.$emit("remove-from-cart");
+          this.$emit("remove-from-cart", item.quantity);
         } catch (err) {
           console.log(err);
         }
@@ -167,7 +166,7 @@ export default {
             "https://main.odour.site/user/cart/remove",
             {
               productId: item.id,
-              quantity: item.quantity,
+              quantity: Math.abs(item.quantity),
             },
             {
               headers: {
@@ -176,11 +175,15 @@ export default {
             }
           );
           if (response.status == 200) this.cartItems.splice(index, 1);
-          this.$emit("remove-from-cart");
+          this.$emit("remove-from-cart", item.quantity);
         } catch (error) {
           console.log(error);
+          if (error.response.status == 401) {
+            this.refreshToken();
+          }
         }
       }
+      this.overlay = false;
     },
     calculateTotal(items) {
       this.totalQuantity = 0;
@@ -230,6 +233,7 @@ export default {
           this.cartItemsCopy = JSON.parse(
             JSON.stringify(res.data.body.orderItems)
           );
+          this.overlay = false;
         } catch (err) {
           console.log(err);
         }
@@ -242,7 +246,7 @@ export default {
           });
           this.cartItems = Array.from(res.data.body.orderItems);
           this.cartItemsCopy = Array.from(res.data.body.orderItems);
-          console.log(this.cartItems);
+          this.overlay = false;
         } catch (err) {
           console.log(err);
           if (err.response.status == 401) {
@@ -254,7 +258,6 @@ export default {
 
     // click plus button
     async updateCartAddQuantity(product, index) {
-      if (product.quantity == 0) return;
       this.overlay = true;
       if (this.isLogin == false) {
         try {
@@ -267,6 +270,7 @@ export default {
             { withCredentials: true }
           );
           this.updateQuantity(product, index, "add");
+          this.$emit("add-to-cart", 1);
         } catch (err) {
           console.log(err);
         }
@@ -285,9 +289,11 @@ export default {
             }
           );
           this.updateQuantity(product, index, "add");
+          this.$emit("add-to-cart", 1);
         } catch (error) {
           console.log(error);
           if (error.response.status == 401) {
+            this.refreshToken();
           }
         }
       }
@@ -295,7 +301,7 @@ export default {
 
     // click minus button
     async updateCartSubtractQuantity(product, index) {
-      if (product.quantity == 0) return;
+      if (product.quantity == 1) return;
       this.overlay = true;
       if (this.isLogin == false) {
         try {
@@ -308,6 +314,7 @@ export default {
             { withCredentials: true }
           );
           this.updateQuantity(product, index, "remove");
+          this.$emit("remove-from-cart", 1);
         } catch (err) {
           console.log(err);
         }
@@ -326,9 +333,12 @@ export default {
             }
           );
           this.updateQuantity(product, index, "remove");
+          this.$emit("remove-from-cart", 1);
+          console.log(res);
         } catch (error) {
           console.log(error);
           if (error.response.status == 401) {
+            this.refreshToken();
           }
         }
       }

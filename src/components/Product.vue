@@ -1,4 +1,13 @@
 <template>
+  <v-overlay v-model="overlay" class="d-flex align-center justify-center">
+    <v-progress-circular
+      class="mx-auto"
+      color="primary"
+      indeterminate="disable-shrink"
+      size="50"
+      width="4"
+    ></v-progress-circular>
+  </v-overlay>
   <div>
     <v-dialog
       v-model="zoomImage"
@@ -73,15 +82,11 @@
               <p class="text-h6">Nhóm hương:</p>
               <p>{{ nhomHuong }}</p>
             </div>
-            <v-responsive width="75vw">
+            <v-responsive max-width="50vw">
               <p class="text-h6">Tầng hương:</p>
-              <p width="auto">
-                Tầng đầu: {{ tangHuongDau }}
-                <br />
-                Tầng giữa: {{ tangHuongGiua }}
-                <br />
-                Tầng cuối: {{ tangHuongCuoi }}
-              </p>
+              <p width="auto">Tầng đầu: {{ tangHuongDau }}</p>
+              <p>Tầng giữa: {{ tangHuongGiua }}</p>
+              <p>Tầng cuối: {{ tangHuongCuoi }}</p>
             </v-responsive>
             <div>
               <p class="text-h6">Độ lưu hương:</p>
@@ -188,20 +193,9 @@
 
 <script>
 import axios from "axios";
-import { inject } from "vue";
 export default {
-  setup() {
-    const cartNumber = inject("cartNumber");
-
-    const check = () => {
-      cartNumber.value++;
-    };
-
-    return {
-      check,
-    };
-  },
   data: () => ({
+    overlay: false,
     zoomImage: false,
     nhomHuong: "",
     tangHuongDau: "",
@@ -227,23 +221,11 @@ export default {
     },
 
     async addToCart() {
-      if (this.$cookies.get("ato") == null) {
+      this.overlay = true;
+      if (this.$cookies.get("ato") !== null) {
+        console.log(this.$cookies.get("ato"));
         try {
-          await axios.post(
-            "https://main.odour.site/guest/cart/add",
-            {
-              productId: this.product.id,
-              quantity: this.quantity,
-            },
-            { withCredentials: true }
-          );
-          this.$emit("add-to-cart");
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        try {
-          await axios.post(
+          const response = await axios.post(
             "https://main.odour.site/user/cart/add",
             {
               productId: this.product.id,
@@ -255,9 +237,27 @@ export default {
               },
             }
           );
+          console.log(response);
+          this.$emit("add-to-cart", this.quantity);
+          this.overlay = false;
         } catch (error) {
           console.log(error);
           this.refreshToken();
+        }
+      } else {
+        try {
+          await axios.post(
+            "https://main.odour.site/guest/cart/add",
+            {
+              productId: this.product.id,
+              quantity: this.quantity,
+            },
+            { withCredentials: true }
+          );
+          this.$emit("add-to-cart", this.quantity);
+          this.overlay = false;
+        } catch (error) {
+          console.log(error);
         }
       }
     },

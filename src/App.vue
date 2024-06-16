@@ -74,13 +74,14 @@ export default {
     loadEmailConfirmationDialog: false,
     isLogin: false,
     cartNumber: 0,
+    cartItem: [],
   }),
   methods: {
-    incrementCartNumber() {
-      this.cartNumber++;
+    incrementCartNumber(quantity) {
+      this.cartNumber += quantity;
     },
-    decrementCartNumber() {
-      this.cartNumber--;
+    decrementCartNumber(quantity) {
+      this.cartNumber -= quantity;
     },
     updateCartNumber(newCartNumber) {
       this.cartNumber = newCartNumber;
@@ -110,7 +111,11 @@ export default {
           const res = await axios.get("https://main.odour.site/guest/cart", {
             withCredentials: true,
           });
-          this.cartNumber = res.data.body.orderItems.length;
+          console.log(res.data.body.orderItems);
+          this.cartItem = res.data.body.orderItems;
+          this.cartItem.forEach((element) => {
+            this.cartNumber += element.quantity;
+          });
         } catch (err) {
           console.log(err);
         }
@@ -121,7 +126,10 @@ export default {
               Authorization: `Bearer ${this.$cookies.get("ato")}`,
             },
           });
-          this.cartNumber = res.data.body.orderItems.length;
+          this.cartItem = res.data.body.orderItems;
+          this.cartItem.forEach((element) => {
+            this.cartNumber += element.quantity;
+          });
         } catch (err) {
           console.log(err);
           if (err.response.status == 401) {
@@ -172,6 +180,7 @@ export default {
   mounted() {
     // this.$cookies.set("confe", "false", "30d", "/");
     this.getCartFromAPI();
+    this.checkConfirmEmail();
   },
 };
 </script>
