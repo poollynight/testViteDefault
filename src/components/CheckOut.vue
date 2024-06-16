@@ -20,7 +20,7 @@
       style="z-index: 100; position: relative"
       v-model="showAlertDanger"
       text=""
-      :title='alertDangerTitle'
+      :title="alertDangerTitle"
       type="red-darken-2"
     ></v-alert>
     <v-row class="mt-5">
@@ -153,7 +153,7 @@ export default {
       ],
       showAlert: false,
       showAlertDanger: false,
-      alertDangerTitle: '',
+      alertDangerTitle: "",
       totalPrice: 0,
       stringRules: [(v) => !!v || "Trường này không được để trống"],
     };
@@ -214,7 +214,7 @@ export default {
       });
     },
     async submitOrder() {
-      this.showAlertDanger = false
+      this.showAlertDanger = false;
       this.overlay = true;
       var count = 0;
       for (let key in this.customer) {
@@ -253,6 +253,9 @@ export default {
           this.showAlert = true;
           this.overlay = false;
           this.$emit("remove-from-cart", this.productQuantity);
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 2000);
         } catch (err) {
           console.log(err);
           if (err.response.status == 401) {
@@ -261,14 +264,11 @@ export default {
             this.refreshToken();
           }
         }
-      } else{
+      } else {
         this.alertDangerTitle = "Vui lòng nhập đủ các trường!";
         this.showAlertDanger = true;
         this.overlay = false;
       }
-      setTimeout(() => {
-        this.$router.push("/");
-      }, 2000);
     },
     async getVietnamProvinces() {
       try {
@@ -336,8 +336,8 @@ export default {
   mounted() {
     this.loadBill();
     this.getVietnamProvinces();
-    this.apiCartInput.forEach(element => {
-      this.productQuantity += element.quantity
+    this.apiCartInput.forEach((element) => {
+      this.productQuantity += element.quantity;
     });
   },
 };
